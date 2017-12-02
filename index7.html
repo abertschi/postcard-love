@@ -1,0 +1,351 @@
+<html>
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=News+Cycle:700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <style>
+     body{
+       /* font-family: 'Ubuntu', sans-serif; */
+       font-family: 'Open Sans', sans-serif;
+       font-family: 'Rubik', sans-serif;
+       font-family: 'News Cycle', sans-serif;
+     }
+     section{
+       height: 100%;
+       width: 100%;
+     }
+     .header{
+       /* background-color: #7CDBD5; */
+       /* background-color: #F53240; */
+       /* background-color: #F9BE03; */
+       /* background-color: #02C8A7; */
+       /* #FFCC01; */
+
+       height: 100%;
+       width: 100%;
+     }
+
+     .title {
+       font-size: 40pt;
+     }
+
+     .slogan {
+       color: #F0ECEB
+     }
+
+     .title__txt1 {
+       color: #FFFFFF;
+       background-color: #D00000;
+     }
+     
+     .title__txt2 {
+       color: #FFFFFF;
+       background-color: #D00000;
+     }
+
+     .logo__container {
+       /* background-color: red; */
+       height: 100%;
+       width: 100%;
+       text-align: center;
+       padding-top: 50px;       
+
+     }
+
+
+     .logo__postcard {
+       height: 100%;
+       width: 80vw;
+       max-height: 650px;
+       max-width: 950px;
+
+       font-size: 30px;
+
+       background-image: url('mail_title7.svg');
+       background-size: contain;
+       background-repeat: no-repeat;
+       /* background-color: blue; */
+       display: inline-block;
+       /* margin-left: 10%; */
+     }
+
+     .logo__postcard__txt1 {
+       /* background-color: green; */
+       position: relative;
+       /* top: 10vh; */
+       /* left: 0vw; */
+       text-align: left;
+       margin-top: 150px;
+       margin-left: 10vw;
+
+       /* display: inline-block */
+     }
+
+     .logo__postcard__txt2 {
+       /* background-color: green; */
+       position: relative;
+       /* top: 10vh; */
+       /* left: 0vw; */
+       text-align: left;
+       margin-top: 15px;
+       margin-left: 10vw;
+
+       /* display: inline-block */
+     }
+
+     .txt__red {
+       background-color: white;
+       color:  #1C3144;
+     }
+
+     .slogan {
+       padding-top: 70px;
+       padding-left: 10%;
+       font-size: 40px;
+       font-weight: bold;
+     }
+
+     .slogan__txt1 {
+       color: black;
+       
+     }
+     
+     .slogan__txt2 {
+       color: black;
+       margin-top: -15px;
+       /* margin-top: 5px; */
+       /* background-color: green; */
+     }
+
+
+     .header__left {
+       width: 50%;
+       float: left;
+       height: 100%;
+       background-color: #FF3C00;
+       /* text-align: center; */
+     }
+     
+     .header__right {
+       /* background-color: #F0ECEB; */
+       background-color: black;
+       width: 50%;
+       height: 100%;
+       /* background-color: green; */
+       float: right;
+     }
+
+     
+     .c {
+       color: white;
+       font-size: 50px;
+     }
+
+     .logo {
+       /* position: absolute; */
+       height: 100%;
+       width: 100%;
+       /* background-color: blue; */
+       /* width: 40%; */
+       text-align: center;
+       
+       overflow: hidden;
+       /* bottom: 30%; */
+
+       background-image: url('bg.svg');
+       background-size: cover;
+       background-repeat: no-repeat;
+       /* background-color: blue; */
+
+     }
+
+     .logo__img__1 {
+       text-align: center;
+       width: 60vw;
+       /* margin-top: -30vh; */
+       margin-left: 5%;
+       margin-top: -300px;
+       max-width: 900px;
+
+       /* background-color: red; */
+       
+     }
+
+     .logo__img__2 {
+       width: 400px;
+       right: -20%;
+       top: 40%;
+       position: absolute;
+       /* margin-right: -60%; */
+
+       /* background-color: red; */
+       
+     }
+
+     .logo__slogan {
+       color: white;
+       font-size: 15px;
+       margin-top: 55vh;
+     }
+
+     .logo__img__3 {
+       position: absolute;
+
+
+       
+       /* width: 300px; */
+
+       /* background-color: red; */
+       
+     }
+
+     .logo__message {
+       margin-top: 10px;
+       font-size: 20px;
+     }
+
+     a {
+       color: black;
+       font-style: italic;
+       text-decoration: underline;
+     }
+
+     .sun {
+       position: absolute;
+       right: 5%;
+       top: 5%;
+       width: 70px;
+     }
+     .cloud {
+       position: absolute;
+     }
+
+     .cloud__1 {
+       width: 100px;
+       right: 7%;
+       top: 15%;
+
+     }
+
+     .cloud__2 {
+       width: 80px;
+     }
+
+     .demo a {
+       /* background-color: green; */
+       /* position: absolute; */
+       z-index: 2;
+       display: inline-block;
+       -webkit-transform: translate(0, -50%);
+       transform: translate(0, -50%);
+       
+       color: #fff;
+       /* font : normal 400 20px/1 'Josefin Sans', sans-serif; */
+       /* letter-spacing: .1em; */
+       text-decoration: none;
+       font-style: normal;
+       transition: opacity .3s;
+     }
+     .demo a:hover {
+       opacity: .5;
+     }
+
+     #section01 a {
+       padding-top: 50px;
+
+     }
+     #section01 a span {
+       position: absolute;
+       top: 0;
+       left: 50%;
+       width: 24px;
+       height: 24px;
+       margin-left: -12px;
+       border-left: 1px solid #fff;
+       border-bottom: 1px solid #fff;
+       -webkit-transform: rotate(-45deg);
+       transform: rotate(-45deg);
+       box-sizing: border-box;
+     }
+
+     .slogan__txt3 {
+       position: absolute;
+       bottom: 10px;
+       margin-left: 15%;
+       font-size: 18px;
+       font-variant: normal;
+       
+     }
+     .upload {
+       background-color: black;
+       text-align: center;
+       color: white;
+     }
+
+     .upload__dragdrop {
+
+       width: 50%;
+       height: auto;
+       background-image: url('upload.svg');
+       background-size: cover;
+       background-repeat: no-repeat;
+       
+       
+     }
+    </style>
+  </head>
+  <body>
+    <section class="header">
+      <div class="header__left">
+        <div class="slogan">
+          <div class="slogan__txt1">SHARE SOME <span class="c"> LOVE</span> </div>
+          <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span></div>
+
+          <div class="slogan__txt3 demo" id="section01">
+              <a href="#section02"><span></span>get started</a>
+          </div>
+
+        </div>
+      </div>
+      <div class="header__right">
+
+        <!-- <img src="cloud_1.svg" class="cloud cloud__1" />
+             <img src="cloud_2.svg" class="cloud cloud__2" />
+             <img src="sun.svg" class="sun" /> -->
+        <div class="logo">
+          <div class="logo__slogan">
+
+          </div>
+          <!-- <img src="bubble1.svg" class="logo__img__1" /> -->
+          <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
+          <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
+          <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
+          <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
+          <!-- <div class="logo__message"> -->
+            <!-- </div> -->
+
+        </div>
+
+      </div>
+      
+
+
+    </section>
+    <section class="upload">
+      aslkdfj
+      <div class="upload__dragdrop">
+        test
+      </div>
+
+        
+    </section>
+  </body>
+</html>
