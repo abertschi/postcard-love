@@ -11,6 +11,8 @@
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="jquery.highlight-within-textarea.css" rel="stylesheet">
+    <script src="jquery.highlight-within-textarea.js"></script>
     <style>
      body{
        /* font-family: 'Ubuntu', sans-serif; */
@@ -21,6 +23,7 @@
      section{
        height: 100%;
        width: 100%;
+       min-height: 700px;
      }
      .header{
        /* background-color: #7CDBD5; */
@@ -288,18 +291,112 @@
        background-color: black;
        text-align: center;
        color: white;
+       padding-top: 150px;
+       /* height: 50%; */
      }
 
      .upload__dragdrop {
+       margin-top: 30px;
+       /* margin-bottom: 50px; */
+       /* padding-bottom: 50p; */
+       /* width: 100%; */
+       /* background-color: green; */
+       color: white;
+     }
+     .upload__dragdrop__img {
+       width: 60vw;
+       max-width: 600px;
+       min-width: 300px;
+     }
 
-       width: 50%;
-       height: auto;
-       background-image: url('upload.svg');
-       background-size: cover;
-       background-repeat: no-repeat;
-       
+     .upload__dragdrop__txt {
+       margin-top: -1px;
+       font-size: 20px;
+       color: grey;
+
+       /* padding-left: 10px;
+          padding-right: 10px;
+          padding-top: 3px;
+          padding-bottom: 3px; */
+       /* background-color: grey; */
+
+     }
+
+     .step__title {
+       font-size: 40px;
+       font-weight: normal;
+       padding-left: 10px;
+       padding-right: 10px;
+       padding-top: 3px;
+       padding-bottom: 3px;
+
+     }
+     .upload__title {
+       background-color: #FF3C00;
+
        
      }
+     .choose_text {
+       background-color: #FF3C00;
+       padding-top: 150px;
+       /* height: 70%; */
+       text-align: center;
+     }
+
+     .choose_text__title {
+       background-color: black;
+       color: white;
+       margin-bottom: 100px;
+
+     }
+
+     .choose_text__msg {       
+       margin-top: 10px;
+       font-size: 30px; !important;
+     }
+
+     textarea:focus {
+       /* border-bottom: none!important; */
+       box-shadow: none!important;
+       border-color: black!important;
+     }
+
+     textarea {
+       font-size: 30px !important;
+       border-color: black!important;
+       /* border-bottom: none!important; */
+       /* box-shadow: none!important; */
+       /* background-color: blue !important; */
+
+     }
+     
+     ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+       color:    #000;
+     }
+     :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+       color:    #000;
+       opacity:  1;
+     }
+     ::-moz-placeholder { /* Mozilla Firefox 19+ */
+       color:    #000;
+       opacity:  1;
+     }
+     :-ms-input-placeholder { /* Internet Explorer 10-11 */
+       color:    #000;
+     }
+     ::-ms-input-placeholder { /* Microsoft Edge */
+       color:    #000;
+     }
+
+     ::placeholder { /* Most modern browsers support this now. */
+       color:    #000;
+     }
+
+     .submission {
+       text-align: center;
+       back
+     }
+
     </style>
   </head>
   <body>
@@ -310,7 +407,7 @@
           <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span></div>
 
           <div class="slogan__txt3 demo" id="section01">
-              <a href="#section02"><span></span>get started</a>
+            <a href="#section02"><span></span>get started</a>
           </div>
 
         </div>
@@ -330,7 +427,7 @@
           <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
           <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
           <!-- <div class="logo__message"> -->
-            <!-- </div> -->
+          <!-- </div> -->
 
         </div>
 
@@ -340,12 +437,53 @@
 
     </section>
     <section class="upload">
-      aslkdfj
-      <div class="upload__dragdrop">
-        test
-      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <span class="upload__title step__title">CHOOSE AN IMAGE</span>
+          </div>
+          <div class="col s12">
+            <div class="upload__dragdrop">
+              <img src="upload.svg" class="upload__dragdrop__img" />
+              <br/>
+              <span class="upload__dragdrop__txt">
+                Drag and image here or press to choose from filesystem
+              </span>
+            </div>
 
-        
+          </div>
+          
+        </div>        
+      </div>
     </section>
+    <section class="choose_text">
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <span class="choose_text__title step__title">WRITE A MESSAGE</span>
+          </div>
+          <div class="col s12 choose_text__msg">
+            <br/>
+            <textarea id="textarea1" class="materialize-textarea choose_text__textarea" placeholder="Enter your message ..." maxlenght="200"></textarea>
+            <script>
+	    </script>
+
+          </div>          
+        </div>        
+      </div>
+    </section>
+    <section class="submission">
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <span class="choose_text__title step__title">WHO ARE YOU?</span>
+          </div>
+          <div class="col s12">
+
+          </div>          
+        </div>        
+      </div>
+    </section>
+
   </body>
 </html>
