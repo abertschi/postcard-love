@@ -394,7 +394,29 @@
 
      .submission {
        text-align: center;
-       back
+       text-align: center;
+       color: white;
+       padding-top: 150px;
+
+     }
+
+     .sender__info {
+       font-size: 30px;
+       font-weight: normal;
+       padding-left: 3px;
+       padding-right: 3px;
+       padding-top: 3px;
+       padding-bottom: 3px;
+       background-color: black;
+       color: white;
+     }
+
+     .sender__info__title {
+       background-color: black;
+       color: white;
+       margin-bottom: 150px;
+
+       
      }
 
     </style>
@@ -464,7 +486,10 @@
           </div>
           <div class="col s12 choose_text__msg">
             <br/>
-            <textarea id="textarea1" class="materialize-textarea choose_text__textarea" placeholder="Enter your message ..." maxlenght="200"></textarea>
+            <textarea id="textarea1" class="materialize-textarea choose_text__textarea"
+                      placeholder="Enter your message ..."
+                      maxlenght="200"
+                      data-length="200"></textarea>
             <script>
 	    </script>
 
@@ -472,18 +497,26 @@
         </div>        
       </div>
     </section>
+    <!-- https://www.flaticon.com/free-icon/monkey_599879 -->
     <section class="submission">
       <div class="container">
         <div class="row">
           <div class="col s12">
-            <span class="choose_text__title step__title">WHO ARE YOU?</span>
+            <span class="sender__info__title step__title">WHO ARE YOU?</span>
           </div>
-          <div class="col s12">
-
+          <div class="row" >
+            <div class="col s12 valign-wrapper">
+              <div class="col s3" style="">
+                <span class="sender__info"> NAME</span>
+              </div>
+              <div class="input-field col s9" style="">
+                <input id="input_text" type="text" data-length="10">
+                <label for="input_text"></label>
+              </div>
+            </div>
           </div>          
         </div>        
       </div>
     </section>
-
   </body>
 </html>
