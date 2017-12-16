@@ -6,19 +6,23 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=News+Cycle:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=News+Cycle:700,400" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <link href="jquery.highlight-within-textarea.css" rel="stylesheet">
     <script src="jquery.highlight-within-textarea.js"></script>
+    
     <style>
      body{
        /* font-family: 'Ubuntu', sans-serif; */
-       font-family: 'Open Sans', sans-serif;
-       font-family: 'Rubik', sans-serif;
+       /* font-family: 'Open Sans', sans-serif; */
+       /* font-family: 'Rubik', sans-serif; */
        font-family: 'News Cycle', sans-serif;
+
+       /* font-weight: lighter; */
      }
      section{
        height: 100%;
@@ -26,6 +30,7 @@
        min-height: 700px;
      }
      .header{
+       overflow: hidden;
        /* background-color: #7CDBD5; */
        /* background-color: #F53240; */
        /* background-color: #F9BE03; */
@@ -130,7 +135,9 @@
 
 
      .header__left {
-       width: 50%;
+       /* width: 50%; */
+       width: 100%;
+       /* width: 100%; */
        float: left;
        height: 100%;
        background-color: #FF3C00;
@@ -296,7 +303,9 @@
      }
 
      .upload__dragdrop {
-       margin-top: 30px;
+       margin-top: 60px;
+
+       cursor: pointer !important;
        /* margin-bottom: 50px; */
        /* padding-bottom: 50p; */
        /* width: 100%; */
@@ -304,15 +313,17 @@
        color: white;
      }
      .upload__dragdrop__img {
+       cursor: pointer !important;
        width: 60vw;
-       max-width: 600px;
+       max-width: 700px;
        min-width: 300px;
      }
 
      .upload__dragdrop__txt {
        margin-top: -1px;
-       font-size: 20px;
-       color: grey;
+       font-size: 30px;
+       /* color: grey; */
+       font-weight: 0;
 
        /* padding-left: 10px;
           padding-right: 10px;
@@ -324,7 +335,7 @@
 
      .step__title {
        font-size: 40px;
-       font-weight: normal;
+       font-weight: bold;
        padding-left: 10px;
        padding-right: 10px;
        padding-top: 3px;
@@ -333,7 +344,6 @@
      }
      .upload__title {
        background-color: #FF3C00;
-
        
      }
      .choose_text {
@@ -347,11 +357,11 @@
        background-color: black;
        color: white;
        margin-bottom: 100px;
-
      }
 
-     .choose_text__msg {       
-       margin-top: 10px;
+     .choose_text__msg {
+       margin-top: 20px;
+       /* margin-top: 10px; */
        font-size: 30px; !important;
      }
 
@@ -363,6 +373,7 @@
 
      textarea {
        font-size: 30px !important;
+
        border-color: black!important;
        /* border-bottom: none!important; */
        /* box-shadow: none!important; */
@@ -392,11 +403,19 @@
        color:    #000;
      }
 
+     .sender {
+       text-align: center;
+       color: black;
+       padding-top: 150px;
+       background-color: white;
+
+     }
+
      .submission {
        text-align: center;
-       text-align: center;
-       color: white;
+       color: black;
        padding-top: 150px;
+       background-color: #FF3C00;
 
      }
 
@@ -409,14 +428,45 @@
        padding-bottom: 3px;
        background-color: black;
        color: white;
+       margin-top: 60px;
      }
 
      .sender__info__title {
        background-color: black;
        color: white;
-       margin-bottom: 150px;
+       margin-bottom: 150px; 
+     }
 
-       
+     .sender__info_txt {
+       color: black;
+     }
+     .sender__info_txt input {
+       font-size: 30px !important;
+       /* background-color: green !important; */
+       margin-top: -20px !important;
+     }
+
+     /* label focus color */
+     .input-field input[type=text]:focus + label {
+       color: #000 !important;
+     }
+     /* label underline focus color */
+     .input-field input[type=text]:focus {
+       border-bottom: 1px solid #000 !important;
+       box-shadow: 0 1px 0 0 #000 !important;
+     }
+
+     .g-recaptcha {
+       display: inline-block;
+     }
+
+     .submit__name {
+       margin-top: 70px; 
+     }
+
+     .submit__name--pading {
+       /* padding-top: 30px !important; */
+       /* TODO: Mediaquery */
      }
 
     </style>
@@ -458,65 +508,98 @@
 
 
     </section>
-    <section class="upload">
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <span class="upload__title step__title">CHOOSE AN IMAGE</span>
-          </div>
-          <div class="col s12">
-            <div class="upload__dragdrop">
-              <img src="upload.svg" class="upload__dragdrop__img" />
+    <form>
+      
+      
+      <section class="upload">
+        <div class="container">
+          <div class="row">
+            <div class="col s12">
+              <span class="upload__title step__title">#1 UPLOAD IMAGE</span>
+            </div>
+            <div class="col s12">
+              <div class="upload__dragdrop">
+                <img src="upload.svg" class="upload__dragdrop__img" />
+                <br/>
+                <span class="upload__dragdrop__txt">
+                  <!-- Drag and image here or press to choose from filesystem -->
+                  <!-- Drag image here -->
+                </span>
+              </div>
+
+            </div>
+            
+          </div>        
+        </div>
+      </section>
+      <section class="choose_text">
+        <div class="container">
+          <div class="row">
+            <div class="col s12">
+              <span class="choose_text__title step__title">#2 WRITE MESSAGE</span>
+            </div>
+            <div class="col s12 choose_text__msg">
               <br/>
-              <span class="upload__dragdrop__txt">
-                Drag and image here or press to choose from filesystem
-              </span>
+              <textarea id="textarea1" class="materialize-textarea choose_text__textarea"
+                        placeholder="Enter your message ..."
+                        maxlenght="200"
+                        data-length="200"></textarea>
+              <script>
+	      </script>
+
+            </div>          
+          </div>        
+        </div>
+      </section>
+      <!-- https://www.flaticon.com/free-icon/monkey_599879 -->
+      <section class="sender">
+        <div class="container">
+          <div class="row">
+            <div class="col s12">
+              <span class="sender__info__title step__title">#3 ABOUT YOU</span>
             </div>
+          </div>
+          <div class="row submit__name" >
+            <div class="col s12 m3 l3 submit__name--pading" >
+              <span class="sender__info"> NAME</span>
+            </div>
+            <div class="input-field col m7 l7 s12 sender__info_txt submit__name--pading" >
+              <input maxlength="50"  style="; "
+                     id="input_text"
+                     type="text"
+                     data-length="50"
+                     class=""
+                     maxlenght="50" size="50"
+                     placeholder="Enter your name">
+              <label for="input_text"></label>
+            </div>
+          </div>
+          <div class="row submit__name" style="">
+            <div class="col s12 m3 l3 submit__name--pading" style=" text-align: center !important; margin-top: 25px !important">
+              <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
+            </div>
+            <div class="input-field col s12 m7 l7 sender__info_txt left-align submit__name--pading" style="">
+              <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
+            </div>
+          </div>
 
-          </div>
-          
-        </div>        
-      </div>
-    </section>
-    <section class="choose_text">
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <span class="choose_text__title step__title">WRITE A MESSAGE</span>
-          </div>
-          <div class="col s12 choose_text__msg">
-            <br/>
-            <textarea id="textarea1" class="materialize-textarea choose_text__textarea"
-                      placeholder="Enter your message ..."
-                      maxlenght="200"
-                      data-length="200"></textarea>
-            <script>
-	    </script>
-
-          </div>          
-        </div>        
-      </div>
-    </section>
-    <!-- https://www.flaticon.com/free-icon/monkey_599879 -->
-    <section class="submission">
-      <div class="container">
-        <div class="row">
-          <div class="col s12">
-            <span class="sender__info__title step__title">WHO ARE YOU?</span>
-          </div>
           <div class="row" >
-            <div class="col s12 valign-wrapper">
-              <div class="col s3" style="">
-                <span class="sender__info"> NAME</span>
-              </div>
-              <div class="input-field col s9" style="">
-                <input id="input_text" type="text" data-length="10">
-                <label for="input_text"></label>
+            <div class="col s12 center-align" >
+              <div class="center-align" style="">
+                <span class="center-align">
+
+                </span>
               </div>
             </div>
-          </div>          
+          </div>
         </div>        
       </div>
-    </section>
+      </section>
+      <section class="submission" >
+asdlfjka;sdlfj
+
+        
+      </section>
+    </form>
   </body>
 </html>
