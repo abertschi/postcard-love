@@ -14,6 +14,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <link href="jquery.highlight-within-textarea.css" rel="stylesheet">
     <script src="jquery.highlight-within-textarea.js"></script>
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#FF3C00">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#FF3C00">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#FF3C00">
+
+    <!-- TODO: -->
+    <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->
     
     <style>
      body{
@@ -25,20 +35,21 @@
        /* font-weight: lighter; */
      }
      section{
-       height: 100%;
-       width: 100%;
-       min-height: 700px;
+       height: 100vh;
+       width: 100vw;
+       min-height: 600px;
      }
      .header{
        overflow: hidden;
+       min-height: 500px;
        /* background-color: #7CDBD5; */
        /* background-color: #F53240; */
        /* background-color: #F9BE03; */
        /* background-color: #02C8A7; */
        /* #FFCC01; */
 
-       height: 100%;
-       width: 100%;
+       height: 100vh;
+       width: 100vw;
      }
 
      .title {
@@ -116,9 +127,11 @@
 
      .slogan {
        padding-top: 70px;
-       padding-left: 10%;
-       font-size: 40px;
+       /* padding-left: 10%; */
+       font-size: 30px;
+       /* font-size: 40px; */
        font-weight: bold;
+       /* background-color: blue; */
      }
 
      .slogan__txt1 {
@@ -133,22 +146,32 @@
        /* background-color: green; */
      }
 
+     .slogan__txt4 {
+       color: black;
+       font-size: 20px;
+       margin-top: 20px;
+       /* padding-left:  */
+       /* text-align: center; */
+       
+     }
 
-     .header__left {
+
+     .header__left { 
        /* width: 50%; */
        width: 100%;
        /* width: 100%; */
        float: left;
-       height: 100%;
+       height: 100vh;
        background-color: #FF3C00;
-       /* text-align: center; */
+       
+       text-align: center;
      }
      
      .header__right {
        /* background-color: #F0ECEB; */
        background-color: black;
        width: 50%;
-       height: 100%;
+       /* height: 100%; */
        /* background-color: green; */
        float: right;
      }
@@ -156,7 +179,7 @@
      
      .c {
        color: white;
-       font-size: 50px;
+       font-size: 35px;
      }
 
      .logo {
@@ -287,9 +310,10 @@
      }
 
      .slogan__txt3 {
-       position: absolute;
-       bottom: 10px;
-       margin-left: 15%;
+       /* position: absolute; */
+       /* bottom: 10px; */
+       /* margin-left: 15%; */
+       margin-top: 30vh;
        font-size: 18px;
        font-variant: normal;
        
@@ -298,7 +322,7 @@
        background-color: black;
        text-align: center;
        color: white;
-       padding-top: 150px;
+       /* padding-top: 100px; */
        /* height: 50%; */
      }
 
@@ -334,7 +358,7 @@
      }
 
      .step__title {
-       font-size: 40px;
+       font-size: 30px;
        font-weight: bold;
        padding-left: 10px;
        padding-right: 10px;
@@ -346,9 +370,13 @@
        background-color: #FF3C00;
        
      }
+
+     .section {
+       padding-top: 80px;
+     }
      .choose_text {
        background-color: #FF3C00;
-       padding-top: 150px;
+       
        /* height: 70%; */
        text-align: center;
      }
@@ -362,19 +390,24 @@
      .choose_text__msg {
        margin-top: 20px;
        /* margin-top: 10px; */
-       font-size: 30px; !important;
+       /* font-size: 20px; !important; */
      }
 
      textarea:focus {
        /* border-bottom: none!important; */
        box-shadow: none!important;
        border-color: black!important;
+       border-spacing: 0px 0px;
      }
 
      textarea {
-       font-size: 30px !important;
-
+       /* padding-bottom: -90px !important; */
+       overflow-y: scroll !important;
+       max-height: 300px;
+       font-size: 20px !important;
        border-color: black!important;
+       border-spacing: 0px 0px !important;
+       border-spacing: 0px 0px;
        /* border-bottom: none!important; */
        /* box-shadow: none!important; */
        /* background-color: blue !important; */
@@ -406,7 +439,7 @@
      .sender {
        text-align: center;
        color: black;
-       padding-top: 150px;
+       /* padding-top: 150px; */
        background-color: white;
 
      }
@@ -431,6 +464,10 @@
        margin-top: 60px;
      }
 
+     .sender__info--first {
+       margin-top: 70px;
+     }
+
      .sender__info__title {
        background-color: black;
        color: white;
@@ -441,9 +478,9 @@
        color: black;
      }
      .sender__info_txt input {
-       font-size: 30px !important;
+       font-size: 20px !important;
        /* background-color: green !important; */
-       margin-top: -20px !important;
+       /* margin-top: -20px !important; */
      }
 
      /* label focus color */
@@ -461,12 +498,35 @@
      }
 
      .submit__name {
+
+     }
+
+     .submit__name--first {
        margin-top: 70px; 
      }
 
      .submit__name--pading {
-       /* padding-top: 30px !important; */
+       padding-top: 30px !important;
        /* TODO: Mediaquery */
+     }
+
+     
+
+     .submission__send {
+       padding-top: 20vh;
+       
+     }
+
+     .submission__send__button {
+       font-size: 30px;
+       font-weight: bold;
+       padding-left: 20px;
+       padding-right: 20px;
+       padding-top: 10px;
+       padding-bottom: 10px;
+       background-color:black;
+       color: white;
+       cursor: pointer !important;
      }
 
     </style>
@@ -475,35 +535,35 @@
     <section class="header">
       <div class="header__left">
         <div class="slogan">
-          <div class="slogan__txt1">SHARE SOME <span class="c"> LOVE</span> </div>
-          <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span></div>
+          <div class="slogan__txt1">&lt; SHARE SOME <span class="c"> LOVE</span> </div>
+          <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span> /&gt;</div>
+          <div class="slogan__txt4">say 👋<br/> and send me a postcard for free</div>
 
           <div class="slogan__txt3 demo" id="section01">
             <a href="#section02"><span></span>get started</a>
           </div>
-
         </div>
       </div>
-      <div class="header__right">
+      <!-- <div class="header__right"> -->
 
-        <!-- <img src="cloud_1.svg" class="cloud cloud__1" />
-             <img src="cloud_2.svg" class="cloud cloud__2" />
-             <img src="sun.svg" class="sun" /> -->
-        <div class="logo">
-          <div class="logo__slogan">
+      <!-- <img src="cloud_1.svg" class="cloud cloud__1" />
+           <img src="cloud_2.svg" class="cloud cloud__2" />
+           <img src="sun.svg" class="sun" /> -->
+      <!-- <div class="logo"> -->
+      <!-- <div class="logo__slogan"> -->
 
-          </div>
-          <!-- <img src="bubble1.svg" class="logo__img__1" /> -->
-          <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
-          <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
-          <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
-          <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
-          <!-- <div class="logo__message"> -->
-          <!-- </div> -->
+      <!-- </div> -->
+      <!-- <img src="bubble1.svg" class="logo__img__1" /> -->
+      <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
+      <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
+      <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
+      <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
+      <!-- <div class="logo__message"> -->
+      <!-- </div> -->
 
-        </div>
+      <!-- </div> -->
 
-      </div>
+      <!-- </div> -->
       
 
 
@@ -511,7 +571,7 @@
     <form>
       
       
-      <section class="upload">
+      <section class="upload section">
         <div class="container">
           <div class="row">
             <div class="col s12">
@@ -532,7 +592,7 @@
           </div>        
         </div>
       </section>
-      <section class="choose_text">
+      <section class="choose_text section">
         <div class="container">
           <div class="row">
             <div class="col s12">
@@ -552,15 +612,15 @@
         </div>
       </section>
       <!-- https://www.flaticon.com/free-icon/monkey_599879 -->
-      <section class="sender">
+      <section class="sender section">
         <div class="container">
           <div class="row">
             <div class="col s12">
               <span class="sender__info__title step__title">#3 ABOUT YOU</span>
             </div>
           </div>
-          <div class="row submit__name" >
-            <div class="col s12 m3 l3 submit__name--pading" >
+          <div class="row submit__name submit__name--first" >
+            <div class="col s12 m3 l3 " >
               <span class="sender__info"> NAME</span>
             </div>
             <div class="input-field col m7 l7 s12 sender__info_txt submit__name--pading" >
@@ -575,10 +635,10 @@
             </div>
           </div>
           <div class="row submit__name" style="">
-            <div class="col s12 m3 l3 submit__name--pading" style=" text-align: center !important; margin-top: 25px !important">
+            <div class="col s12 m3 l3 " style=" text-align: center !important; margin-top: 25px !important">
               <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
             </div>
-            <div class="input-field col s12 m7 l7 sender__info_txt left-align submit__name--pading" style="">
+            <div class="input-field col s12 m7 l7 sender__info_txt center-align submit__name--pading" style="">
               <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
             </div>
           </div>
@@ -596,9 +656,11 @@
       </div>
       </section>
       <section class="submission" >
-asdlfjka;sdlfj
-
-        
+        <div class="submission__send">
+          <span class="submission__send__button " >
+            SEND POSTCARD
+          </span>
+        </div>
       </section>
     </form>
   </body>
