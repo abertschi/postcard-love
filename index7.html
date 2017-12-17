@@ -33,12 +33,30 @@
        font-family: 'News Cycle', sans-serif;
 
        /* font-weight: lighter; */
+       background-color: #FF3C00;
+       /* overflow-x: hidden; */
+
+       opacity:0;
+       transition: opacity 1s;
+       -webkit-transition: opacity 1s; /* Safari */
      }
      section{
-       height: 100vh;
-       width: 100vw;
+       /* height: 100vh; */
+       /* width: 100vw; */
        min-height: 600px;
+       display: table;
+       width: 100%;
+       height: 100vh;
      }
+
+
+     section > div {
+       /* vertically align <div> inside <section> */
+       display: table-cell;
+       vertical-align: middle;
+       text-align: center;
+     }
+     
      .header{
        overflow: hidden;
        min-height: 500px;
@@ -48,8 +66,8 @@
        /* background-color: #02C8A7; */
        /* #FFCC01; */
 
-       height: 100vh;
-       width: 100vw;
+       /* height: 100vh; */
+       /* width: 100vw; */
      }
 
      .title {
@@ -155,13 +173,22 @@
        
      }
 
+     .slogan__txt5 {
+       color: black;
+       font-size: 18px;
+       margin-top: 5px;
+       /* padding-left:  */
+       /* text-align: center; */
+       
+     }
+
 
      .header__left { 
        /* width: 50%; */
-       width: 100%;
        /* width: 100%; */
-       float: left;
-       height: 100vh;
+       /* width: 100%; */
+       /* float: left; */
+       /* height: 100vh; */
        background-color: #FF3C00;
        
        text-align: center;
@@ -322,6 +349,7 @@
        background-color: black;
        text-align: center;
        color: white;
+       width: 100% !important;
        /* padding-top: 100px; */
        /* height: 50%; */
      }
@@ -332,9 +360,10 @@
        cursor: pointer !important;
        /* margin-bottom: 50px; */
        /* padding-bottom: 50p; */
-       /* width: 100%; */
+       width: 100% !important;
        /* background-color: green; */
        color: white;
+
      }
      .upload__dragdrop__img {
        cursor: pointer !important;
@@ -373,6 +402,7 @@
 
      .section {
        padding-top: 80px;
+       width: 100%;
      }
      .choose_text {
        background-color: #FF3C00;
@@ -446,7 +476,7 @@
 
      .submission {
        text-align: center;
-       color: black;
+       color: black;pp
        padding-top: 150px;
        background-color: #FF3C00;
 
@@ -480,7 +510,7 @@
      .sender__info_txt input {
        font-size: 20px !important;
        /* background-color: green !important; */
-       /* margin-top: -20px !important; */
+       margin-top: -12px !important;
      }
 
      /* label focus color */
@@ -507,13 +537,14 @@
 
      .submit__name--pading {
        padding-top: 30px !important;
+       
        /* TODO: Mediaquery */
      }
 
      
 
      .submission__send {
-       padding-top: 20vh;
+       /* padding-top: 20vh; */
        
      }
 
@@ -529,11 +560,49 @@
        cursor: pointer !important;
      }
 
+     .submission__send__button:hover {
+       padding-left: 40px;
+       padding-right: 40px;
+       padding-top: 30px;
+       padding-bottom: 30px;       
+     }
+
+     .submission__quote {
+       margin-top: 100px;
+       padding: 10px;
+       color: black;
+       font-size: 20px;
+       font-weight: bold;
+       
+     }
+
+     .container {
+       overflow-x: hidden !important;
+
+     }
+
+     @media only screen and (min-width: 480px) {
+     }
+     
+     @media only screen and (min-width: 601px) {
+       .submit__name--pading {
+         padding-top: 0px !important;
+       }
+
+       .sender__info_captcha {
+         text-align: left;
+         float: left;
+       }
+     }
+
+     @media only screen and (min-width: 992px) {
+     }
+     
     </style>
   </head>
-  <body>
+  <body onload="document.body.style.opacity='1'">    
     <section class="header">
-      <div class="header__left">
+      <div class="header__left" >
         <div class="slogan">
           <div class="slogan__txt1">&lt; SHARE SOME <span class="c"> LOVE</span> </div>
           <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span> /&gt;</div>
@@ -569,11 +638,9 @@
 
     </section>
     <form>
-      
-      
       <section class="upload section">
         <div class="container">
-          <div class="row">
+          <div class="row" >
             <div class="col s12">
               <span class="upload__title step__title">#1 UPLOAD IMAGE</span>
             </div>
@@ -598,7 +665,7 @@
             <div class="col s12">
               <span class="choose_text__title step__title">#2 WRITE MESSAGE</span>
             </div>
-            <div class="col s12 choose_text__msg">
+            <div class="col offset-s1 s10 m8 offset-m2 choose_text__msg ">
               <br/>
               <textarea id="textarea1" class="materialize-textarea choose_text__textarea"
                         placeholder="Enter your message ..."
@@ -623,7 +690,7 @@
             <div class="col s12 m3 l3 " >
               <span class="sender__info"> NAME</span>
             </div>
-            <div class="input-field col m7 l7 s12 sender__info_txt submit__name--pading" >
+            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading" >
               <input maxlength="50"  style="; "
                      id="input_text"
                      type="text"
@@ -638,30 +705,53 @@
             <div class="col s12 m3 l3 " style=" text-align: center !important; margin-top: 25px !important">
               <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
             </div>
-            <div class="input-field col s12 m7 l7 sender__info_txt center-align submit__name--pading" style="">
+            <div class="input-field col s12 m7 l7 sender__info_txt sender__info_captcha center-align submit__name--pading" style="">
               <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
             </div>
           </div>
-
-          <div class="row" >
-            <div class="col s12 center-align" >
-              <div class="center-align" style="">
-                <span class="center-align">
-
-                </span>
-              </div>
+          <div class="row submit__name submit__name--first" style="opacity: 0.2" >
+            <div class="col s12 m3 l3 " >
+              <span class="sender__info"> SECRET</span>
+            </div>
+            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading" >
+              <input maxlength="50"  style="; "
+                     id="input_text"
+                     type="text"
+                     data-length="50"
+                     class=""
+                     maxlenght="50" size="50"
+                     placeholder=":P">
+              <label for="input_text"></label>
             </div>
           </div>
+
         </div>        
-      </div>
+       </div>
       </section>
       <section class="submission" >
         <div class="submission__send">
-          <span class="submission__send__button " >
+          <span class="submission__send__button n" >
             SEND POSTCARD
           </span>
+          <div class="submission__quote">
+            <i>"A smile is happiness you'll find right under your nose." <br/>
+              -- Tom Wilson</i>
+            <br/>
+            <br/>
+            <br/>
+            
+
+            Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
+          </div>
         </div>
       </section>
     </form>
+
+    <script>
+     $("#section01").click(function() {
+       $('html,body').animate({
+         scrollTop: $(".upload").offset().top}, 'slow');
+     });
+    </script>
   </body>
 </html>
