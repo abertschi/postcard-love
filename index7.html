@@ -144,19 +144,21 @@
      }
 
      .slogan {
-       padding-top: 70px;
+       /* padding-top: 70px; */
        /* padding-left: 10%; */
        font-size: 30px;
        /* font-size: 40px; */
        font-weight: bold;
        /* background-color: blue; */
-     }
 
-     .slogan__txt1 {
-       color: black;
-       
+       display: table-cell;
+       vertical-align: middle;
+       text-align: center;
+
      }
-     
+     .slogan__txt1 {
+       color: black; 
+     }
      .slogan__txt2 {
        color: black;
        margin-top: -15px;
@@ -164,10 +166,22 @@
        /* background-color: green; */
      }
 
+     .slogan__txt3 {
+       /* position: absolute; */
+       /* bottom: 10px; */
+       /* margin-left: 15%; */
+       margin-top: 20vh;
+       font-size: 18px;
+       font-variant: normal;
+       font-weight: bold;       
+     }
+
+
      .slogan__txt4 {
        color: black;
        font-size: 20px;
        margin-top: 20px;
+       font-weight: bold;
        /* padding-left:  */
        /* text-align: center; */
        
@@ -183,21 +197,28 @@
      }
 
 
-     .header__left { 
-       /* width: 50%; */
+     .header__left {
+       display: table;
+       width: 100%;
        /* width: 100%; */
        /* width: 100%; */
-       /* float: left; */
+       float: left;
        /* height: 100vh; */
        background-color: #FF3C00;
        
        text-align: center;
+       /* background-color: blue; */
+       height: 100%;
      }
      
      .header__right {
        /* background-color: #F0ECEB; */
        background-color: black;
        width: 50%;
+       height: 100%;
+       display: table-cell;
+       vertical-align: middle;
+       text-align: center;
        /* height: 100%; */
        /* background-color: green; */
        float: right;
@@ -220,7 +241,7 @@
        overflow: hidden;
        /* bottom: 30%; */
 
-       background-image: url('bg.svg');
+       background-image: url('bg2.svg');
        background-size: cover;
        background-repeat: no-repeat;
        /* background-color: blue; */
@@ -336,15 +357,6 @@
        box-sizing: border-box;
      }
 
-     .slogan__txt3 {
-       /* position: absolute; */
-       /* bottom: 10px; */
-       /* margin-left: 15%; */
-       margin-top: 30vh;
-       font-size: 18px;
-       font-variant: normal;
-       
-     }
      .upload {
        background-color: black;
        text-align: center;
@@ -507,9 +519,9 @@
      .sender__info_txt {
        color: black;
      }
-     .sender__info_txt input {
+     
+     input {
        font-size: 20px !important;
-       /* background-color: green !important; */
        margin-top: -12px !important;
      }
 
@@ -568,14 +580,26 @@
      }
 
      .submission__quote {
+       font-variant: normal;
        margin-top: 100px;
        padding: 10px;
        color: black;
        font-size: 20px;
-       font-weight: bold;
-       
+       /* font-weight: bold; */
      }
-
+     
+     .text--h1 {
+       font-size: 35px;
+     }
+     .text--h2 {
+       font-size: 30px;
+     }
+     .text--h3 {
+       font-size: 20px;
+     }
+     .text--normal {
+       font-size: 20px !important;
+     }
      .container {
        overflow-x: hidden !important;
 
@@ -593,35 +617,60 @@
          text-align: left;
          float: left;
        }
-     }
 
-     @media only screen and (min-width: 992px) {
-     }
-     
+       .slogan__txt4 {        
+         margin-top: 30px;
+         
+       }
+       .text--h1 {
+         font-size: 50px;
+       }
+       .text--h2 {
+         font-size: 40px;
+       }
+       .text--h3 {
+         font-size: 25px;
+       }
+       .text--normal {
+         font-size: 25px !important;
+       }
+
+       .input { /*sender__info_txt */
+         font-size: 25px !important; /*TODO */
+       }
+
+       
+       @media only screen and (min-width: 992px) {
+         .header__left {
+           width: 50%;
+         }
+       }
+       
     </style>
   </head>
   <body onload="document.body.style.opacity='1'">    
     <section class="header">
       <div class="header__left" >
         <div class="slogan">
-          <div class="slogan__txt1">&lt; SHARE SOME <span class="c"> LOVE</span> </div>
-          <div class="slogan__txt2">WITH A <span class="c"> POSTCARD</span> /&gt;</div>
-          <div class="slogan__txt4">say 👋<br/> and send me a postcard for free</div>
+          <div class="slogan__txt1 text--h2">&lt; SHARE SOME <span class="c text--h1"> LOVE</span> </div>
+          <div class="slogan__txt2 text--h2">WITH A <span class="c text--h1"> POSTCARD</span> /&gt;</div>
+          <div class="slogan__txt4 text--h3">say 👋<br/> and send me a postcard for free</div>
 
-          <div class="slogan__txt3 demo" id="section01">
+          <div class="slogan__txt3 demo text--h3" id="section01">
             <a href="#section02"><span></span>get started</a>
           </div>
         </div>
       </div>
-      <!-- <div class="header__right"> -->
+      <div class="header__right">
+        <!-- <img src="cloud_1.svg" class="cloud cloud__1" />
+             <img src="cloud_2.svg" class="cloud cloud__2" />
+             <img src="sun.svg" class="sun" /> -->
+        <div class="logo">
+          <div class="logo__slogan">
+          </div>
+        </div>
 
-      <!-- <img src="cloud_1.svg" class="cloud cloud__1" />
-           <img src="cloud_2.svg" class="cloud cloud__2" />
-           <img src="sun.svg" class="sun" /> -->
-      <!-- <div class="logo"> -->
-      <!-- <div class="logo__slogan"> -->
-
-      <!-- </div> -->
+      </div>
       <!-- <img src="bubble1.svg" class="logo__img__1" /> -->
       <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
       <!-- <img src="bubble1.svg" class="logo__img__3" /> -->
@@ -667,7 +716,7 @@
             </div>
             <div class="col offset-s1 s10 m8 offset-m2 choose_text__msg ">
               <br/>
-              <textarea id="textarea1" class="materialize-textarea choose_text__textarea"
+              <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal"
                         placeholder="Enter your message ..."
                         maxlenght="200"
                         data-length="200"></textarea>
@@ -690,14 +739,14 @@
             <div class="col s12 m3 l3 " >
               <span class="sender__info"> NAME</span>
             </div>
-            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading" >
+            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading text--normal" >
               <input maxlength="50"  style="; "
                      id="input_text"
                      type="text"
                      data-length="50"
                      class=""
                      maxlenght="50" size="50"
-                     placeholder="Enter your name">
+                     placeholder="Enter your name ...">
               <label for="input_text"></label>
             </div>
           </div>
@@ -705,7 +754,7 @@
             <div class="col s12 m3 l3 " style=" text-align: center !important; margin-top: 25px !important">
               <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
             </div>
-            <div class="input-field col s12 m7 l7 sender__info_txt sender__info_captcha center-align submit__name--pading" style="">
+            <div class="input-field col s12 m7 l7 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal" style="">
               <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
             </div>
           </div>
@@ -713,14 +762,14 @@
             <div class="col s12 m3 l3 " >
               <span class="sender__info"> SECRET</span>
             </div>
-            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading" >
+            <div class="input-field col m7 l7 s8 offset-s2 sender__info_txt submit__name--pading text--normal" >
               <input maxlength="50"  style="; "
                      id="input_text"
                      type="text"
                      data-length="50"
                      class=""
                      maxlenght="50" size="50"
-                     placeholder=":P">
+                     placeholder=":P ...">
               <label for="input_text"></label>
             </div>
           </div>
@@ -733,14 +782,12 @@
           <span class="submission__send__button n" >
             SEND POSTCARD
           </span>
-          <div class="submission__quote">
+          <div class="submission__quote text--h3">
             <i>"A smile is happiness you'll find right under your nose." <br/>
               -- Tom Wilson</i>
             <br/>
             <br/>
             <br/>
-            
-
             Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
           </div>
         </div>
