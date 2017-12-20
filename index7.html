@@ -366,6 +366,10 @@
        /* height: 50%; */
      }
 
+     .upload__input {
+       visibility: hidden;
+     }
+
      .upload__dragdrop {
        margin-top: 60px;
 
@@ -374,14 +378,17 @@
        /* padding-bottom: 50p; */
        width: 100% !important;
        /* background-color: green; */
+       overflow: hidden;
        color: white;
 
      }
      .upload__dragdrop__img {
        cursor: pointer !important;
-       width: 60vw;
+       /* width: 100%; */
+       overflow: hidden;
        max-width: 700px;
        min-width: 300px;
+       background-color: blue;
      }
 
      .upload__dragdrop__txt {
@@ -548,13 +555,9 @@
      }
 
      .submit__name--pading {
-       padding-top: 30px !important;
-       
+       padding-top: 30px !important;       
        /* TODO: Mediaquery */
      }
-
-     
-
      .submission__send {
        /* padding-top: 20vh; */
        
@@ -635,11 +638,9 @@
          font-size: 25px !important;
        }
 
-       .input { /*sender__info_txt */
+       input { /*sender__info_txt */
          font-size: 25px !important; /*TODO */
-       }
-
-       
+       } 
        @media only screen and (min-width: 992px) {
          .header__left {
            width: 50%;
@@ -695,15 +696,29 @@
               <span class="upload__title step__title">#1 UPLOAD IMAGE</span>
             </div>
             <div class="col s12">
-              <div class="upload__dragdrop">
-                <img src="upload.svg" class="upload__dragdrop__img" />
-                <br/>
+              <div class="upload__dragdrop" id="droptarget">
+                <div class="container">
+                  <div class="row">
+                    <div class="col s12 l12">
+                      <img src="upload.svg" class="upload__dragdrop__img" />
+                    </div>
+                    <!-- <div class="col s12 l6 ">
+                         <div class="col s12 l4">
+                         <img src="upload.svg" class="upload__dragdrop__img" />
+                         </div>
+                         </div> -->
+                  </div>
+                  </div>
+                </div>
                 <span class="upload__dragdrop__txt">
                   <!-- Drag and image here or press to choose from filesystem -->
                   <!-- Drag image here -->
                 </span>
+                <input class="upload__input"
+                       type="file" name="pictures" id="pictures"
+                       multiple="multiple" accept="image/*"
+                />
               </div>
-
             </div>
             
           </div>        
@@ -800,6 +815,81 @@
        $('html,body').animate({
          scrollTop: $(".upload").offset().top}, 'slow');
      });
+     $('.upload__dragdrop__img').click(function() {
+       $('#pictures').click();
+     });
+     
+     function drop_handler(ev) {
+       ev.preventDefault();
+       let files = [];
+       var dt = ev.dataTransfer;
+       if (dt.items) {
+         for (var i=0; i < dt.items.length; i++) {
+           if (dt.items[i].kind == "file") {
+             let f = dt.items[i].getAsFile();
+             files.push(f);
+           }
+         }
+       } else {
+         for (var i=0; i < dt.files.length; i++) {
+           files.push(dt.files[i]);
+         }  
+       }
+       handleFiles(files);
+     }
+     
+     function fileSelect(event) {
+       event.stopPropagation();
+       event.preventDefault();
+       let files = event.target.files;
+       let images = [];
+       for(f of files) {
+         if (f) {
+           images.push(f);
+         }
+       }
+       handleFiles(files);
+     }
+     
+     function handleFiles(files) {
+       let images = [];
+       for(f of files) {
+         if (f.type.startsWith('image/')) {
+           images.push(f);
+           console.log(f.name);
+
+           $('.upload__dragdrop__img')
+             .attr('src', window.URL.createObjectURL(f));
+           break;
+         }
+       }
+     }
+     
+     function dragOver(event) {
+       event.stopPropagation();
+       event.preventDefault();
+       event.dataTransfer.dropEffect = 'copy';
+     }
+     let dropTarget = document.getElementById('droptarget');
+     dropTarget.addEventListener('dragover', dragOver, false);
+     dropTarget.addEventListener('drop', drop_handler, false);
+     
+     /*
+        TODO:
+        [ ] - file upload, show picture(s)
+        [ ] - downsize images?
+        [ ] - crop images?
+        [ ] - form submit
+        [ ] - implement state to remember message, picture, secret and name
+        [ ] - vue.js
+      */
+
+     // http://code.hootsuite.com/html5/
+     // https://www.codeforest.net/html5-image-upload-resize-and-crop
+     // https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+     
+     document.getElementById('pictures')
+             .addEventListener('change', fileSelect, false);
     </script>
   </body>
 </html>
