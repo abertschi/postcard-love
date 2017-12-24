@@ -1,6 +1,5 @@
 <html>
   <head>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
@@ -386,10 +385,19 @@
        cursor: pointer !important;
        /* width: 100%; */
        overflow: hidden;
-       max-width: 700px;
-       min-width: 300px;
-       background-color: blue;
+       max-width: 600px;
+       
+       /* min-width: 300px; */
+       /* background-color: blue; */
      }
+
+     .upload__dragdrop__delete {
+       color: white;
+       font-weight: bold;
+       text-align: center;
+       padding-top: 20px;
+     }
+
 
      .upload__dragdrop__txt {
        margin-top: -1px;
@@ -671,7 +679,6 @@
           <div class="logo__slogan">
           </div>
         </div>
-
       </div>
       <!-- <img src="bubble1.svg" class="logo__img__1" /> -->
       <!-- <img src="bubble1.svg" class="logo__img__2" /> -->
@@ -684,9 +691,6 @@
       <!-- </div> -->
 
       <!-- </div> -->
-      
-
-
     </section>
     <form>
       <section class="upload section">
@@ -699,30 +703,33 @@
               <div class="upload__dragdrop" id="droptarget">
                 <div class="container">
                   <div class="row">
-                    <div class="col s12 l12">
+                    <div class="col s12 l6">
                       <img src="upload.svg" class="upload__dragdrop__img" />
+                      <div class="upload__dragdrop__delete">
+                        DELETE
+                      </div>
                     </div>
-                    <!-- <div class="col s12 l6 ">
-                         <div class="col s12 l4">
-                         <img src="upload.svg" class="upload__dragdrop__img" />
-                         </div>
-                         </div> -->
-                  </div>
+                    <div class="col s12 l6 ">
+                      <!-- <div class="col s12 l4"> -->
+                        <img src="upload.svg" class="upload__dragdrop__img" />
+                        <!-- </div> -->
+                    </div>
                   </div>
                 </div>
-                <span class="upload__dragdrop__txt">
-                  <!-- Drag and image here or press to choose from filesystem -->
-                  <!-- Drag image here -->
-                </span>
-                <input class="upload__input"
-                       type="file" name="pictures" id="pictures"
-                       multiple="multiple" accept="image/*"
-                />
               </div>
+              <span class="upload__dragdrop__txt">
+                <!-- Drag and image here or press to choose from filesystem -->
+                <!-- Drag image here -->
+              </span>
+              <input class="upload__input"
+                     type="file" name="pictures" id="pictures"
+                     multiple="multiple" accept="image/*"
+              />
             </div>
-            
-          </div>        
-        </div>
+          </div>
+          
+        </div>        
+       </div>
       </section>
       <section class="choose_text section">
         <div class="container">
