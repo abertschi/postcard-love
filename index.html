@@ -1,144 +1,338 @@
 <html>
   <head>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=News+Cycle:700,400" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-
+    <link rel="stylesheet" href="styles.css" >
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="jquery.highlight-within-textarea.css" rel="stylesheet">
+    <script src="jquery.highlight-within-textarea.js"></script>
+    
+    <meta name="theme-color" content="#FF3C00">
+    <meta name="msapplication-navbutton-color" content="#FF3C00">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#FF3C00">
+
+    <!-- TODO: -->
+    <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->
+    
     <style>
-     body{
-       font-family: 'Ubuntu', sans-serif;
-     }
-     section{
-     }
-     .header{
-       /* background-color: #7CDBD5; */
-       /* background-color: #F53240; */
-       /* background-color: #F9BE03; */
-       /* background-color: #02C8A7; */
-       /* #FFCC01; */
-       background-color: #FFCC01;
-       height: 100%;
-       width: 100%;
-     }
-
-     .title {
-       font-size: 40pt;
-     }
-
-     .title__txt1 {
-       color: #FFFFFF;
-       background-color: #D00000;
-     }
-     
-     .title__txt2 {
-       color: #FFFFFF;
-       background-color: #D00000;
-     }
-
-     .logo__container {
-       /* background-color: red; */
-       height: 100%;
-       width: 100%;
-       text-align: center;
-       padding-top: 50px;       
-
-     }
-
-
-     .logo__postcard {
-       height: 100%;
-       width: 80vw;
-       max-height: 650px;
-       max-width: 950px;
-
-       font-size: 30px;
-
-       background-image: url('mail_title7.svg');
-       background-size: contain;
-       background-repeat: no-repeat;
-       /* background-color: blue; */
-       display: inline-block;
-       /* margin-left: 10%; */
-     }
-
-     .logo__postcard__txt1 {
-       /* background-color: green; */
-       position: relative;
-       /* top: 10vh; */
-       /* left: 0vw; */
-       text-align: left;
-       margin-top: 150px;
-       margin-left: 10vw;
-
-       /* display: inline-block */
-     }
-
-     .logo__postcard__txt2 {
-       /* background-color: green; */
-       position: relative;
-       /* top: 10vh; */
-       /* left: 0vw; */
-       text-align: left;
-       margin-top: 15px;
-       margin-left: 10vw;
-
-       /* display: inline-block */
-     }
-
-     .txt__red {
-       background-color: white;
-       color:  #1C3144;
-     }
      
     </style>
   </head>
-  <body>
-    <section class="header">
-      <div class="logo__container ">
-        <div class="logo__postcard center-align">
-          <div class="logo__postcard__txt1">
-            <span class="txt__red">SHARE SOME LOVE
-            </span>
-          </div>
-          <div class="logo__postcard__txt2">
-            <span class="txt__red">WITH A POSTCARD
-            </span>
-          </div>
+  <!-- <body onload="document.body.style.opacity='1'">     -->
+  <body id="">
+    <div id="postcard-love">
+      <section class="header upload">
+        <div class="header__left" >
+          <div class="slogan">
+            <div class="slogan__txt1 text--h2">&lt; SHARE SOME <span class="c text--h1"> LOVE</span> </div>
+            <div class="slogan__txt2 text--h2">WITH A <span class="c text--h1"> POSTCARD</span> /&gt;</div>
+            <div class="slogan__txt4 text--h3">say 👋<br/> and send me a postcard for free</div>
 
-          <!-- <img src="mail_title_3.svg" class="logo__container__img" /> -->
+            <div v-on:click="scrollToImageUpload" class="slogan__txt3 demo text--h3" id="slogan__scrolldown">
+              <a href="#0-upload"><span></span>get started</a>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="header__right">
+          <div class="logo">
+            <div class="logo__slogan">
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <!-- <div class="container">
-           <div class="row">
-           <div class="col s12 center-align" >
+      <form>
+        <section class="upload section">
+          <div class="container">
+            <div class="row" >
+              <div class="col s12">
+                <span id="0-upload' " class="upload__title step__title">#1 UPLOAD IMAGE</span>
+              </div>
+              <div class="col s12" >
+                <div class="upload__dragdrop" id="droptarget"
+                     v-on:dragover="imageDragOverHandler"
+                     v-on:drop="imageDropHandler">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col s12 l12"
+                           v-if="love.pictures.length <= 0">
+                        <img src="upload.svg" class="upload__dragdrop__img" />
+                      </div>
+                      <div class="col s12"
+                           v-bind:class="{ l12: love.pictures.lenght <= 1,
+                                  l6: love.pictures.lenght > 1}"
+                           v-if="love.pictures.length > 0"
+                           v-for="(picture, index) in love.pictures">
+                        <img v-bind:src="picture.src"
+                             v-bind:id="'img_'.concat(index)"
+                             class="upload__dragdrop__img" />
+                        <div class="upload__dragdrop__delete"
+                             v-bind:id="'del_'.concat(index)"
+                             v-on:click.stop="removeImage(index)">
+                          DELETE
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span class="upload__dragdrop__txt">
+                  <!-- Drag and image here or press to choose from filesystem -->
+                  <!-- Drag image here -->
+                </span>
+                <input class="upload__input"
+                       type="file" name="pictures" id="pictures"
+                       multiple="multiple" accept="image/*"
+                       v-on:change="fileSelect"
+                />
+              </div>
+            </div>
+          </div>          
+        </section>
+        <section class="choose_text section">
+          <div class="container">
+            <div class="row">
+              <div class="col s12">
+                <span id="0-write" class="choose_text__title step__title">#2 WRITE MESSAGE</span>
+              </div>
+              <div class="col offset-s1 s10 m8 offset-m2 choose_text__msg ">
+                <br/>
+                <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal"
+                          placeholder="Enter your message ..."
+                          maxlenght="200"
+                          v-model="love.message"
+                          data-length="200"></textarea>
+                <script>
+	        </script>
+
+              </div>          
+            </div>        
+          </div>
+        </section>
+        <!-- https://www.flaticon.com/free-icon/monkey_599879 -->
+        <section class="sender section">
+          <div class="container ">
+            <div class="row">
+              <div class="col s12">
+                <span id="0-verify" class="sender__info__title step__title">#3 ABOUT YOU</span>
+              </div>
+            </div>
+            <div class="row submit__name submit__name--first" >
+              <div class="col s12 m3 l3 offset-l1 offset-m1 " >
+                <span class="sender__info"> NAME</span>
+              </div>
+              <div class="col m6 l6 s8 offset-s2 input-field sender__info_txt submit__name--pading text--normal" >
+                <input maxlength="50"  style="; "
+                       id="input_text"
+                       type="text"
+                       data-length="50"
+                       class=""
+                       v-model="love.name"
+                       maxlenght="50" size="50"
+                       placeholder="Enter your name ...">
+                <label for="input_text"></label>
+              </div>
+            </div>
+            <div class="row submit__name" style="">
+              <div class="col s12 m3 l3 offset-l1 offset-m1 " style=" text-align: center !important; margin-top: 25px !important">
+                <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
+              </div>
+              <div class="input-field col s12 m6 l6 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal" style="">
+                <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
+              </div>
+            </div>
+            <div class="row submit__name submit__name--first" style="opacity: 0.2" >
+              <div class="col s12 m3 l3 offset-l1 offset-m1" >
+                <span class="sender__info"> SECRET</span>
+              </div>
+              <div class="input-field col m6 l6 s8 offset-s2 sender__info_txt submit__name--pading text--normal" >
+                <input maxlength="50"  style="; "
+                       id="input_text"
+                       type="text"
+                       v-model="love.secret"
+                       data-length="50"
+                       class=""
+                       maxlenght="50" size="50"
+                       placeholder=":P ...">
+                <label for="input_text"></label>
+              </div>
+            </div>
+          </div>        
+          <!-- </div> -->
+        </section>
+        <section class="submission" >
+          <div class="submission__send">
+            <span id="0-send" class="submission__send__button n"
+                  v-on:click="send">
+              SEND POSTCARD
+            </span>
+
+            <!-- <div class="submission__progress" >
+                 <div class="progress submission__progress__bar center-align">
+                 <div class="indeterminate center-align"></div>
+                 </div>
+                 </div> -->
+
+            
+            <div class="submission__quote text--h3">
+              <i>"A smile is happiness you'll find right under your nose." <br/>
+                -- Tom Wilson</i>
+              <br/>
+              <br/>
+              <br/>
+              Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
+            </div>
+          </div>
+        </section>
+      </form>
+    </div>
+    <script>
+     (function(){
+       let vue = new Vue({
+         el: '#postcard-love',
+         data: {
+           love: {
+             pictures: [],
+             name: '',
+             secret: '',
+             message: ''
+           }
+         },
+         watch: {
+           love: {
+             handler() {
+               localStorage.setItem('love', JSON.stringify(this.love));
+             },
+             deep: true,
+           }
+
+         },
+         mounted() {
+           console.log('App mounted!');
+           if (localStorage.getItem('love')) { 
+             this.love = JSON.parse(localStorage.getItem('love')) || [];
+           }
+         },
+         methods: {
+           scrollToImageUpload: function() {
+             $('html,body').animate({
+               scrollTop: $(".upload").offset().top}, 'slow');
+           },
+
+           imageDragOverHandler: function(event) {
+             event.stopPropagation();
+             event.preventDefault();
+             event.dataTransfer.dropEffect = 'copy';
+           },
            
-           </div>
-           </div>
-           <!-- <div class="row">
-           <div class="col s1"></div>
-           <div class="col s10 ">
+           imageDropHandler: function(ev) {
+             ev.preventDefault();
+             let files = [];
+             var dt = ev.dataTransfer;
+             if (dt.items) {
+               for (var i=0; i < dt.items.length; i++) {
+                 if (dt.items[i].kind == "file") {
+                   let f = dt.items[i].getAsFile();
+                   files.push(f);
+                 }
+               }
+             } else {
+               for (var i=0; i < dt.files.length; i++) {
+                 files.push(dt.files[i]);
+               }  
+             }
+             this.handleFiles(files);
+           },
+           
+           fileSelect: function(event) {
+             event.stopPropagation();
+             event.preventDefault();
+             let files = event.target.files;
+             let images = [];
+             console.log(files);
+             if (files) {
+               files = Array.from(files)
+               files.forEach(f => {
+                 if (f) {
+                   images.push(f);
+                 }
+               });
+               this.handleFiles(files);
+             }
+           },
 
-           <div class="title center-align">
-           <span class="title__txt1">
-           SHARE SOME <3 
-           </span>
-           <br />
-           <span class="title__txt2">
-           WITH A POSTCARD
-           </span>
-           </div>
-           </div>
+           removeImage: function(index) {
+             console.log('removing index: ' + index);
+             this.love.pictures.splice(index, 1);
+           },
+           
+           handleFiles: function(files) {
+             files.forEach(f => {
+               if (f.type.startsWith('image/')) {
+                 console.log('adding picture');
+                 this.getBase64(f, (encoded) => {
+                   this.love.pictures.push({
+                     name: f.name,
+                     src: encoded
+                   });
+                 });
+               }
+             });
+           },
+           
+           getBase64: function (file, func) {
+             var reader = new FileReader();
+             reader.readAsDataURL(file);
+             reader.onload = function () {
+               func(reader.result);
+               console.log(reader.result);
+             };
+             reader.onerror = function (error) {
+               console.log('Error: ', error);
+             };
+           },
 
+           send: function() {
 
-           <div class="col s1"></div>
-           </div>
-           </div> -->
-    </section>
+           },
+         }
+       });
+
+       $('#droptarget').click(function() {
+         $('#pictures').click();
+       });
+
+       $("").mouseover(function(){
+         // $("#b").css("background-color", "red");
+       });
+       
+     }());
+     
+     /* let dropTarget = document.getElementById('droptarget');
+      * dropTarget.addEventListener('dragover', dragOver, false);
+      * dropTarget.addEventListener('drop', drop_handler, false);
+      * */
+     /*
+        TODO:
+        [ ] - file upload, show picture(s)
+        [ ] - downsize images?
+        [ ] - crop images?
+        [ ] - form submit
+        [ ] - implement state to remember message, picture, secret and name
+        [ ] - vue.js
+      */
+
+     // http://code.hootsuite.com/html5/
+     // https://www.codeforest.net/html5-image-upload-resize-and-crop
+     // https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+    </script>
   </body>
 </html>
