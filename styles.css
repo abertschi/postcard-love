@@ -13,6 +13,11 @@ html, body{
   /* opacity:0; */
   transition: opacity 1s;
   -webkit-transition: opacity 1s; /* Safari */
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden; 
 }
 
 html {
@@ -25,6 +30,11 @@ section{
   display: table;
   width: 100% !important;
   height: 100vh;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden; 
 }
 
 
@@ -355,23 +365,24 @@ a {
 
 .upload__dragdrop {
   margin-top: 60px;
-
   cursor: pointer !important;
   /* margin-bottom: 50px; */
   /* padding-bottom: 50p; */
-  width: 100% !important;
+  /* width: 100% !important; */
   /* background-color: green; */
   overflow: hidden;
   color: white;
+  text-align: center;
 
 }
 .upload__dragdrop__img {
   cursor: pointer !important;
-  width: 80%;
-  overflow: hidden;
-  max-width: 700px;
-  
-  /* min-width: 300px; */
+  width: 100%;
+  /* overflow: hidden; */
+  max-width: 600px;
+  /* margin-left: -20px; */
+  min-width: 100px;
+  /* min-width: 100px; */
   /* background-color: blue; */
 }
 

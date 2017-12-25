@@ -7,7 +7,10 @@
     <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=News+Cycle:700,400" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <!-- <link rel="stylesheet" href="normalize.css" > -->
     <link rel="stylesheet" href="styles.css" >
+
+    
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -19,6 +22,7 @@
     <meta name="theme-color" content="#FF3C00">
     <meta name="msapplication-navbutton-color" content="#FF3C00">
     <meta name="apple-mobile-web-app-status-bar-style" content="#FF3C00">
+    <meta name=" viewport-fit" content="contain">
 
     <!-- TODO: -->
     <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->
@@ -63,7 +67,7 @@
                      v-on:drop="imageDropHandler">
                   <div class="container">
                     <div class="row">
-                      <div class="col s12 l12"
+                      <div class="col s12 l12 m12" style="padding: 0; margin: 0;"
                            v-if="love.pictures.length <= 0">
                         <img src="upload.svg" class="upload__dragdrop__img" />
                       </div>
