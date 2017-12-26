@@ -71,8 +71,7 @@
                            v-if="love.pictures.length <= 0">
 
                         <img src="upload.svg" class="upload__dragdrop__img"
-                             v-if="! processImage.active "
-                        />
+                         v-if="! processImage.active" />
                         
                       </div>
                       <div class="col s12"
@@ -81,34 +80,32 @@
                            v-if="love.pictures.length > 0"
                            v-for="(picture, index) in love.pictures">
 
-                        <img v-bind:src="picture.src"
+                        <img v-bind:src="picture.src"n
                              v-bind:id="'img_'.concat(index)"
-                             v-if="! processImage.active && processImage.index != index"
                              class="upload__dragdrop__img" />
 
-                        <!-- show spinner animation when loading -->
-                        <div class="upload__dragdrop__spinner"
-                             v-if="processImage.active && processImage.index == index">
-                          <div class="preloader-wrapper active">
-                            <div class="spinner-layer spinner-red-only">
-                              <div class="circle-clipper left">
-                                <div class="circle"></div>
-                              </div><div class="gap-patch">
-                                <div class="circle"></div>
-                              </div><div class="circle-clipper right">
-                                <div class="circle"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                         
                         <div class="upload__dragdrop__delete"
                              v-bind:id="'del_'.concat(index)"
-                             v-if="! processImage.active && processImage.index != index"
                              v-on:click.stop="removeImage(index)">
                           DELETE
                         </div>
-                        
+
+                      </div>
+                    </div>
+                    <!-- show spinner animation when loading -->
+                    <div class="upload__dragdrop__spinner"
+                         v-if="processImage.active">
+                      <div class="preloader-wrapper active">
+                        <div class="spinner-layer spinner-red-only">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div><div class="gap-patch">
+                            <div class="circle"></div>
+                          </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -199,7 +196,7 @@
         </section>
         <section class="submission" >
           <div class="submission__send">
-            <span id="0-send" class="submission__send__button n"
+            <span id="0-send" class="submission__send__button"
                   v-on:click="send">
               SEND POSTCARD
             </span>
@@ -235,25 +232,7 @@
        reader.onerror = function (error) {
          console.log('Error: ', error);
        };
-     };
-
-     self.onmessage = function(e) {
-       let payload = e.data;
-       if (payload.cmd == 'process') {
-
-         console.log('executing');         
-         this.getBase64(payload.data.file, (encoded) => {
-           self.postMessage({
-             cmd: 'process_done',
-             data: {
-               name: payload.data.file.name,
-               src: encoded
-             }
-           });
-         });
-       }
-     };
-     
+     };     
     </script>
     
     <script>
@@ -269,8 +248,7 @@
            },
            imageWorker: null,
            processImage: {
-             active: false,
-             index: 0
+             active: false
            }
          },
          watch: {
@@ -294,11 +272,13 @@
            this.imageWorker.onmessage = function(e) {
              if (e.data.cmd == 'process_done') {
                let data = e.data.data;
-               /* that.processImage.active = false;*/
-               that.love.pictures.push({
-                 name: data.name,
-                 src: data.src
-               });
+               /* alert('done');*/
+               /* console.log(that.processImage.active);
+                * that.processImage.active = false;
+                * that.love.pictures.push({
+                *   name: data.name,
+                *   src: data.src
+                * });*/
              }
            }
            
@@ -364,24 +344,59 @@
                  if (first) {
                    // show loading animation
                    first = false;
-                   that.processImage.index = this.love.pictures.length - 1;
                    that.processImage.active = true;
                  }
-                 
-                 console.log('adding picture');
-                 this.imageWorker.postMessage({
-                   cmd: 'process',
-                   data: {
-                     file: f,
-                     name: f.name
-                   }
-                 });
+
+                 this.resizeImage(f, (encoded) => {
+                   console.log(that.processImage.active);
+                   that.love.pictures.push({
+                     name: f.name,
+                     src: encoded
+                   });
+                   that.processImage.active = false;
+                 })
                }
              });
            },
            send: function() {
 
            },
+           resizeImage: function (file, callback) {
+             const MAX_WIDTH = 1500;
+             const MAX_HEIGHT = 1000;
+             
+             var reader = new FileReader();
+             reader.onloadend = function() {
+               var tempImg = new Image();
+               tempImg.src = reader.result;
+               tempImg.onload = function() {
+                 
+                 var tempW = tempImg.width;
+                 var tempH = tempImg.height;
+                 if (tempW > tempH) {
+                   if (tempW > MAX_WIDTH) {
+                     tempH *= MAX_WIDTH / tempW;
+                     tempW = MAX_WIDTH;
+                   }
+                 } else {
+                   if (tempH > MAX_HEIGHT) {
+                     tempW *= MAX_HEIGHT / tempH;
+                     tempH = MAX_HEIGHT;
+                   }
+                 }
+                 
+                 var canvas = document.createElement('canvas');
+                 canvas.width = tempW;
+                 canvas.height = tempH;
+                 var ctx = canvas.getContext("2d");
+                 ctx.drawImage(this, 0, 0, tempW, tempH);
+                 var dataURL = canvas.toDataURL("image/png");
+
+                 callback(dataURL);
+               }    
+             }
+             reader.readAsDataURL(file);
+           }
          }
        });
 
