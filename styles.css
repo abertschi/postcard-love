@@ -363,6 +363,10 @@ a {
   visibility: hidden;
 }
 
+.hidden {
+    display: none;
+}
+
 .upload__dragdrop {
   margin-top: 60px;
   cursor: pointer !important;
@@ -373,6 +377,14 @@ a {
   overflow: hidden;
   color: white;
   text-align: center;
+
+}
+
+
+.upload__dragdrop__spinner {
+    height: 400px;
+    padding-top: 100px;
+    /* background-color: red; */
 
 }
 .upload__dragdrop__img {

@@ -59,7 +59,7 @@
           <div class="container">
             <div class="row" >
               <div class="col s12">
-                <span id="0-upload' " class="upload__title step__title">#1 UPLOAD IMAGE</span>
+                <span id="0-upload" class="upload__title step__title">#1 UPLOAD IMAGE</span>
               </div>
               <div class="col s12" >
                 <div class="upload__dragdrop" id="droptarget"
@@ -69,21 +69,46 @@
                     <div class="row">
                       <div class="col s12 l12 m12" style="padding: 0; margin: 0;"
                            v-if="love.pictures.length <= 0">
-                        <img src="upload.svg" class="upload__dragdrop__img" />
+
+                        <img src="upload.svg" class="upload__dragdrop__img"
+                             v-if="! processImage.active "
+                        />
+                        
                       </div>
                       <div class="col s12"
                            v-bind:class="{ l12: love.pictures.lenght <= 1,
                                   l6: love.pictures.lenght > 1}"
                            v-if="love.pictures.length > 0"
                            v-for="(picture, index) in love.pictures">
+
                         <img v-bind:src="picture.src"
                              v-bind:id="'img_'.concat(index)"
+                             v-if="! processImage.active && processImage.index != index"
                              class="upload__dragdrop__img" />
+
+                        <!-- show spinner animation when loading -->
+                        <div class="upload__dragdrop__spinner"
+                             v-if="processImage.active && processImage.index == index">
+                          <div class="preloader-wrapper active">
+                            <div class="spinner-layer spinner-red-only">
+                              <div class="circle-clipper left">
+                                <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
                         <div class="upload__dragdrop__delete"
                              v-bind:id="'del_'.concat(index)"
+                             v-if="! processImage.active && processImage.index != index"
                              v-on:click.stop="removeImage(index)">
                           DELETE
                         </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -198,6 +223,39 @@
         </section>
       </form>
     </div>
+    
+    <script id="imageWorker" type="javascript/worker">
+     function getBase64(file, func) {
+       var reader = new FileReader();
+       reader.readAsDataURL(file);
+       reader.onload = function () {
+         func(reader.result);
+         /* console.log(reader.result);*/
+       };
+       reader.onerror = function (error) {
+         console.log('Error: ', error);
+       };
+     };
+
+     self.onmessage = function(e) {
+       let payload = e.data;
+       if (payload.cmd == 'process') {
+
+         console.log('executing');         
+         this.getBase64(payload.data.file, (encoded) => {
+           self.postMessage({
+             cmd: 'process_done',
+             data: {
+               name: payload.data.file.name,
+               src: encoded
+             }
+           });
+         });
+       }
+     };
+     
+    </script>
+    
     <script>
      (function(){
        let vue = new Vue({
@@ -208,6 +266,11 @@
              name: '',
              secret: '',
              message: ''
+           },
+           imageWorker: null,
+           processImage: {
+             active: false,
+             index: 0
            }
          },
          watch: {
@@ -224,11 +287,26 @@
            if (localStorage.getItem('love')) { 
              this.love = JSON.parse(localStorage.getItem('love')) || [];
            }
+           
+           let blob = new Blob([document.querySelector('#imageWorker').textContent]);
+           this.imageWorker = new Worker(window.URL.createObjectURL(blob));
+           let that = this;
+           this.imageWorker.onmessage = function(e) {
+             if (e.data.cmd == 'process_done') {
+               let data = e.data.data;
+               /* that.processImage.active = false;*/
+               that.love.pictures.push({
+                 name: data.name,
+                 src: data.src
+               });
+             }
+           }
+           
          },
          methods: {
            scrollToImageUpload: function() {
              $('html,body').animate({
-               scrollTop: $(".upload").offset().top}, 'slow');
+               scrollTop: $("#0-upload").offset().top}, 'slow');
            },
 
            imageDragOverHandler: function(event) {
@@ -261,7 +339,6 @@
              event.preventDefault();
              let files = event.target.files;
              let images = [];
-             console.log(files);
              if (files) {
                files = Array.from(files)
                files.forEach(f => {
@@ -279,31 +356,29 @@
            },
            
            handleFiles: function(files) {
+             let first = true;
+             let that = this;
              files.forEach(f => {
                if (f.type.startsWith('image/')) {
+
+                 if (first) {
+                   // show loading animation
+                   first = false;
+                   that.processImage.index = this.love.pictures.length - 1;
+                   that.processImage.active = true;
+                 }
+                 
                  console.log('adding picture');
-                 this.getBase64(f, (encoded) => {
-                   this.love.pictures.push({
-                     name: f.name,
-                     src: encoded
-                   });
+                 this.imageWorker.postMessage({
+                   cmd: 'process',
+                   data: {
+                     file: f,
+                     name: f.name
+                   }
                  });
                }
              });
            },
-           
-           getBase64: function (file, func) {
-             var reader = new FileReader();
-             reader.readAsDataURL(file);
-             reader.onload = function () {
-               func(reader.result);
-               console.log(reader.result);
-             };
-             reader.onerror = function (error) {
-               console.log('Error: ', error);
-             };
-           },
-
            send: function() {
 
            },
