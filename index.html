@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <!-- <link rel="stylesheet" href="normalize.css" > -->
     <link rel="stylesheet" href="styles.css" >
-
+    <title>Postcard <3</title>
     
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -54,7 +54,7 @@
         </div>
       </section>
 
-      <form>
+      <form id="form">
         <section class="upload section">
           <div class="container">
             <div class="row" >
@@ -131,10 +131,12 @@
               </div>
               <div class="col offset-s1 s10 m8 offset-m2 choose_text__msg ">
                 <br/>
-                <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal"
+                <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal "
                           placeholder="Enter your message ..."
                           maxlenght="200"
                           v-model="love.message"
+                          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                          
                           data-length="200"></textarea>
                 <script>
 	        </script>
@@ -163,6 +165,7 @@
                        class=""
                        v-model="love.name"
                        maxlenght="50" size="50"
+                       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                        placeholder="Enter your name ...">
                 <label for="input_text"></label>
               </div>
@@ -172,7 +175,8 @@
                 <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
               </div>
               <div class="input-field col s12 m6 l6 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal" style="">
-                <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" style=""></div>
+                <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4"
+                     data-callback="recaptcha_callback" style=""></div>
               </div>
             </div>
             <div class="row submit__name submit__name--first" style="opacity: 0.2" >
@@ -184,6 +188,7 @@
                        id="input_text"
                        type="text"
                        v-model="love.secret"
+                       autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                        data-length="50"
                        class=""
                        maxlenght="50" size="50"
@@ -201,21 +206,51 @@
               SEND POSTCARD
             </span>
 
-            <!-- <div class="submission__progress" >
-                 <div class="progress submission__progress__bar center-align">
-                 <div class="indeterminate center-align"></div>
-                 </div>
-                 </div> -->
-
-            
-            <div class="submission__quote text--h3">
-              <i>"A smile is happiness you'll find right under your nose." <br/>
-                -- Tom Wilson</i>
-              <br/>
-              <br/>
-              <br/>
-              Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
+            <div class="submission__progress" v-if="submission.active && !submission.showError && !submission.sent">
+              <div class="preloader-wrapper active">
+                <div class="spinner-layer" style="border-color: black !important;">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
             </div>
+            
+            <div class="submission__quote text--h3" v-if="!submission.active && !submission.showError && !submission.sent">
+              <div class="submission__validation" >
+                <i v-if="validation.submit && !validation.image">✖ <a href="#0-upload">Please upload an image</a><br/></i>
+                <i v-if="validation.submit && !validation.human">✖ <a href="#0-verify">Please verify that you are human </a><br/></i> 
+              </div>
+              
+              <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">
+                <i>"A smile is happiness you'll find right under your nose." <br/>
+                  -- Tom Wilson</i>
+                <br/>
+                <br/>
+                <br/>
+                Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
+              </div>
+            </div>
+            
+            <div class="submission__error__container" v-if="submission.showError && !submission.sent">
+              <div class="submission__error" >
+                <span class="submission__error__smiley"> :(</span>
+                <span class="submission__error__msg text--h3">
+                  {{submission.error}}
+                </span>
+              </div>
+            </div>
+            <div class="submission__success__container" v-if="submission.sent">
+              <div class="submission__success" >
+                <span class="submission__success__smiley">:D</span>
+                <span class="submission__success__msg text--h3">
+                  postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
+                </span>
+              </div>
           </div>
         </section>
       </form>
@@ -234,10 +269,19 @@
        };
      };     
     </script>
+
+    <script type="text/javascript">
+
+    </script>
     
     <script>
+     var vue;
+     function recaptcha_callback(){
+       vue.validation.human = true;
+     }
+     
      (function(){
-       let vue = new Vue({
+       vue = new Vue({
          el: '#postcard-love',
          data: {
            love: {
@@ -249,22 +293,45 @@
            imageWorker: null,
            processImage: {
              active: false
+           },
+           // false is not valid
+           validation: {
+             submit: false,
+             human: false,
+             image: false
+           },
+           submission: {
+             active: false,
+             error: '',
+             showError: false,
+             sent: false
            }
          },
          watch: {
            love: {
              handler() {
                localStorage.setItem('love', JSON.stringify(this.love));
+               this.validation.image = this.love.pictures.length > 0;
+               console.log('val ' + this.validation.image);
+             },
+             deep: true,
+           },
+
+           validation: {
+             handler() {
+
              },
              deep: true,
            }
-
          },
+         
          mounted() {
            console.log('App mounted!');
            if (localStorage.getItem('love')) { 
              this.love = JSON.parse(localStorage.getItem('love')) || [];
            }
+
+           this.validation.image = this.love.pictures.length > 0;
            
            let blob = new Blob([document.querySelector('#imageWorker').textContent]);
            this.imageWorker = new Worker(window.URL.createObjectURL(blob));
@@ -283,10 +350,15 @@
            }
            
          },
-         methods: {
+         methods: {           
            scrollToImageUpload: function() {
              $('html,body').animate({
                scrollTop: $("#0-upload").offset().top}, 'slow');
+           },
+
+           resetUserInput: function() {
+             this.love.pictures = [];
+             this.love.message = '';
            },
 
            imageDragOverHandler: function(event) {
@@ -354,26 +426,85 @@
                      src: encoded
                    });
                    that.processImage.active = false;
+
                  })
                }
              });
            },
            send: function() {
-             
+             this.validation.submit = true;
+             if (this.validation.human && this.validation.image) {
+               this.submission.active = true;
 
+
+               let form = document.getElementById("form");
+               var data = new FormData(form);
+               console.log(data);
+               
+               // Display the key/value pairs
+               for(var pair of data.entries()) {
+                 console.log(pair[0]+ ', '+ pair[1]); 
+               }
+               
+               let payload = {
+                 message: this.love.message,
+                 name: this.love.name,
+                 secret: this.love.secret,
+                 'g-recaptcha-response': grecaptcha.getResponse()
+               };
+
+               let that = this;
+               $.ajax({
+                 url: "/api/submit",
+                 data: JSON.stringify(payload),
+                 dataType: "json",
+                 cache: false,
+                 contentType: "application/json; charset=utf-8",
+                 type: 'POST',
+                 success: function(data){
+                   alert(data);
+                   that.resetUserInput();
+                 },
+                 error: function(err) {
+                   that.submission.error = err.responseText;
+                   that.submission.showError = true;
+                 },
+                 done: function(data) {
+                   that.submission.active = false;
+                 }
+               });
+             }
            },
            resizeImage: function (file, callback) {
              const MAX_WIDTH = 1500;
              const MAX_HEIGHT = 1000;
-             
+             console.log(file);
              var reader = new FileReader();
              reader.onloadend = function() {
                var tempImg = new Image();
                tempImg.src = reader.result;
                tempImg.onload = function() {
+
+                 let orientation = '';
+                 if (tempImg.naturalWidth > tempImg.naturalHeight) {
+                   orientation = 'landscape';
+                 } else if (tempImg.naturalWidth < tempImg.naturalHeight) {
+                   orientation = 'portrait';
+                 } else {
+                   orientation = 'even';
+                 }
+
+                 console.log('orientation: ' + orientation);
+                 
+
+                 var origW = tempImg.width;
+                 var origH = tempImg.height;
+
+                 console.log('orign: ' + origW + 'x' + origH);
                  
                  var tempW = tempImg.width;
                  var tempH = tempImg.height;
+                 
                  if (tempW > tempH) {
                    if (tempW > MAX_WIDTH) {
                      tempH *= MAX_WIDTH / tempW;
@@ -389,8 +520,29 @@
                  var canvas = document.createElement('canvas');
                  canvas.width = tempW;
                  canvas.height = tempH;
+
                  var ctx = canvas.getContext("2d");
                  ctx.drawImage(this, 0, 0, tempW, tempH);
+                 console.log('canvas: ' + canvas.width + 'x' + canvas.height);
+                 
+                 function isPortrait(img) {
+                   var w = img.naturalWidth || img.width,
+                       h = img.naturalHeight || img.height;
+                   return (h > w);
+                 }
+                 console.log('is portrait: ' + isPortrait(tempImg));
+
+                 
+                 function drawRotated(ctx, degrees){
+                   ctx.clearRect(0,0,canvas.width,canvas.height);
+                   ctx.save();
+                   ctx.translate(canvas.width/2,canvas.height/2);
+                   ctx.rotate(degrees*Math.PI/180);
+                   ctx.drawImage(image,-image.width/2,-image.width/2);
+                   ctx.restore();
+                 }
+
+                 
                  var dataURL = canvas.toDataURL("image/png");
 
                  callback(dataURL);
@@ -400,7 +552,7 @@
            }
          }
        });
-
+       
        $('#droptarget').click(function() {
          $('#pictures').click();
        });
