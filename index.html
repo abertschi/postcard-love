@@ -10,7 +10,7 @@
     <!-- <link rel="stylesheet" href="normalize.css" > -->
     <link rel="stylesheet" href="styles.css" >
     <title>Postcard <3</title>
-    <link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png" />
     
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -60,7 +60,8 @@
           <div class="container">
             <div class="row" >
               <div class="col s12">
-                <span id="0-upload" class="upload__title step__title">#1 UPLOAD IMAGE</span>
+                <span id="0-upload" class="upload__title step__title">
+                  <a href="#0-upload" id="upload__title" class="no-hyperlink" tabindex=1>#1 UPLOAD IMAGE</a></span>
               </div>
               <div class="col s12" >
                 <div class="upload__dragdrop" id="droptarget"
@@ -71,7 +72,7 @@
                       <div class="col s12 l12 m12" style="padding: 0; margin: 0;"
                            v-if="love.pictures.length <= 0">
 
-                        <img src="upload.svg" class="upload__dragdrop__img"
+                        <img src="img/upload.svg" class="upload__dragdrop__img"
                              v-if="! processImage.active" />
                         
                       </div>
@@ -134,11 +135,11 @@
                 <br/>
                 <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal "
                           placeholder="Enter your message ..."
-                          maxlenght="200"
+                          maxlength="400" 
                           v-model="love.message"
                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                          
-                          data-length="200"></textarea>
+                          tabindex=5
+                          data-length="400"></textarea>
                 <script>
 	        </script>
 
@@ -164,20 +165,27 @@
                        type="text"
                        data-length="50"
                        class=""
+                       tabindex=10
                        v-model="love.name"
-                       maxlenght="50" size="50"
+                       maxlength="50" size="50"
                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                        placeholder="Enter your name ...">
                 <label for="input_text"></label>
               </div>
             </div>
             <div class="row submit__name" style="">
-              <div class="col s12 m3 l3 offset-l1 offset-m1 " style=" text-align: center !important; margin-top: 25px !important">
-                <span class="sender__info" style="text-align: center !important; ;">VERIFY</span>
+              <div class="col s12 m3 l3 offset-l1 offset-m1 "
+                   style=" text-align: center !important; margin-top: 25px !important">
+                <span class="sender__info"
+                      style="text-align: center !important; ;">VERIFY</span>
               </div>
-              <div class="input-field col s12 m6 l6 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal" style="">
-                <div class="g-recaptcha" data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4"
-                     data-callback="recaptcha_callback" style=""></div>
+              <div class="input-field col s12 m6 l6 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal"
+                   style="">
+                <a href="" class="no-hyperlink" tabindex=15>
+                  <div class="g-recaptcha"
+                       data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" 
+                       data-callback="recaptcha_callback" style=""></div>
+                </a>
               </div>
             </div>
             <div class="row submit__name submit__name--first" style="opacity: 0.2" >
@@ -185,29 +193,31 @@
                 <span class="sender__info"> SECRET</span>
               </div>
               <div class="input-field col m6 l6 s8 offset-s2 sender__info_txt submit__name--pading text--normal" >
-                <input maxlength="50"  style="; "
+                <input maxlength="1024"  style="; "
                        id="input_text"
                        type="text"
+                       tabindex=20
                        v-model="love.secret"
                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                       data-length="50"
+                       data-length="1024"
                        class=""
-                       maxlenght="50" size="50"
+                       size="1024"
+                       maxlength="1024"
                        placeholder=":P ...">
                 <label for="input_text"></label>
               </div>
             </div>
-          </div>        
-          <!-- </div> -->
+          </div>
         </section>
         <section class="submission" >
           <div class="submission__send">
             <span id="0-send" class="submission__send__button"
                   v-on:click="send">
-              SEND POSTCARD
+              <a href="#0-send" class="no-hyperlink" tabindex=25>SEND POSTCARD</a>
             </span>
 
-            <div class="submission__progress" v-if="submission.active && !submission.showError && !submission.sent">
+            <div class="submission__progress"
+                 v-if="submission.active && !submission.showError && !submission.sent">
               <div class="preloader-wrapper active">
                 <div class="spinner-layer" style="border-color: black !important;">
                   <div class="circle-clipper left">
@@ -221,10 +231,13 @@
               </div>
             </div>
             
-            <div class="submission__quote text--h3" v-if="!submission.active && !submission.showError && !submission.sent">
+            <div class="submission__quote text--h3"
+                 v-if="!submission.active && !submission.showError && !submission.sent">
               <div class="submission__validation" >
-                <i v-if="validation.submit && !validation.image">✖ <a href="#0-upload">Please upload an image</a><br/></i>
-                <i v-if="validation.submit && !validation.human">✖ <a href="#0-verify">Please verify that you are human </a><br/></i> 
+                <i v-if="validation.submit && !validation.image">
+                  ✖ <a href="#0-upload" tabindex="27">Please upload an image</a><br/></i>
+                <i v-if="validation.submit && !validation.human">
+                  ✖ <a href="#0-verify" tabindex="28">Please verify that you are human </a><br/></i> 
               </div>
               
               <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">
@@ -233,7 +246,7 @@
                 <br/>
                 <br/>
                 <br/>
-                Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch">abertschi</a></i>
+                Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch" tabindex="30">abertschi</a></i>
               </div>
             </div>
             
@@ -252,11 +265,11 @@
                   postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
                 </span>
               </div>
+            </div>
           </div>
         </section>
       </form>
     </div>
-    
     <script id="imageWorker" type="javascript/worker">
      function getBase64(file, func) {
        var reader = new FileReader();
@@ -280,6 +293,30 @@
      function recaptcha_callback(){
        vue.validation.human = true;
      }
+
+     $(function() {
+       // https://stackoverflow.com/questions/1125482/
+       // how-to-impose-maxlength-on-textarea-in-html-using-javascript
+       // Get all textareas that have a "maxlength" property.
+       $('textarea[maxlength]').each(function() {
+
+         // Store the jQuery object to be more efficient...
+         var $textarea = $(this);
+
+         // Store the maxlength and value of the field.
+         var maxlength = $textarea.attr('maxlength');
+         var val = $textarea.val();
+
+         // Trim the field if it has content over the maxlength.
+         $textarea.val(val.slice(0, maxlength));
+
+         // Bind the trimming behavior to the "keyup" event.
+         $textarea.bind('keyup', function() {
+           $textarea.val($textarea.val().slice(0, maxlength));
+         });
+
+       });
+     });
      
      (function(){
        vue = new Vue({
@@ -327,29 +364,20 @@
          },
          
          mounted() {
-           console.log('App mounted!');
            if (localStorage.getItem('love')) { 
              this.love = JSON.parse(localStorage.getItem('love')) || [];
            }
-
            this.validation.image = this.love.pictures.length > 0;
            
            let blob = new Blob([document.querySelector('#imageWorker').textContent]);
            this.imageWorker = new Worker(window.URL.createObjectURL(blob));
            let that = this;
+
            this.imageWorker.onmessage = function(e) {
              if (e.data.cmd == 'process_done') {
                let data = e.data.data;
-               /* alert('done');*/
-               /* console.log(that.processImage.active);
-                * that.processImage.active = false;
-                * that.love.pictures.push({
-                *   name: data.name,
-                *   src: data.src
-                * });*/
              }
            }
-           
          },
          methods: {           
            scrollToImageUpload: function() {
@@ -432,21 +460,15 @@
                }
              });
            },
+           
            send: function() {
              this.validation.submit = true;
              if (this.validation.human && this.validation.image) {
                this.submission.active = true;
-
-
+               
                let form = document.getElementById("form");
                var data = new FormData(form);
-               console.log(data);
-               
-               // Display the key/value pairs
-               for(var pair of data.entries()) {
-                 console.log(pair[0]+ ', '+ pair[1]); 
-               }
-               
+           
                let payload = {
                  message: this.love.message,
                  name: this.love.name,
@@ -476,6 +498,7 @@
                });
              }
            },
+           
            resizeImage: function (file, callback) {
              const MAX_WIDTH = 1500;
              const MAX_HEIGHT = 1000;
@@ -557,6 +580,11 @@
        $('#droptarget').click(function() {
          $('#pictures').click();
        });
+
+       $('#upload__title').click(function() {
+         $('#pictures').click();
+       });
+       
 
        $("").mouseover(function(){
          // $("#b").css("background-color", "red");

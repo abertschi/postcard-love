@@ -98,7 +98,7 @@ section > div {
 
     font-size: 30px;
 
-    background-image: url('mail_title7.svg');
+    background-image: url('img/mail_title7.svg');
     background-size: contain;
     background-repeat: no-repeat;
     /* background-color: blue; */
@@ -233,7 +233,7 @@ section > div {
     overflow: hidden;
     /* bottom: 30%; */
 
-    background-image: url('bg2.svg');
+    background-image: url('img/bg2.svg');
     background-size: cover;
     background-repeat: no-repeat;
     /* background-color: blue; */
@@ -696,6 +696,12 @@ input {
 .submission__error__msg {
     margin-left: 40px;
 
+}
+
+.no-hyperlink {
+    text-decoration: none; /* no underline */
+    color: inherit;
+    font-style: normal;
 }
 
 @media only screen and (min-width: 480px) {
