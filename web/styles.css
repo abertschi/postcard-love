@@ -612,6 +612,10 @@ input {
 
 }
 
+.submission__quote__bean {
+
+}
+
 .text--h1 {
     font-size: 35px;
 }
@@ -656,7 +660,7 @@ input {
     
 }
 .submission__success__container {
-    margin-top: 50px;
+    /* margin-top: 50px; */
     text-align: center;
     
 }
@@ -665,11 +669,16 @@ input {
     font-size: 80px;
     font-weight: bold;
     text-align: left;
+    width: 80px;
+    float: left;
+    /* background-color: white; */
 }
 
 .submission__success__msg {
-    margin-left: 40px;
-
+    padding-top: 30px;
+    padding-bottom: 100px;
+    margin-left: 100px;
+    /* background-color: blue; */
 }
 
 .submission__error {

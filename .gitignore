@@ -7,3 +7,6 @@ tests/tokenize.json
 /package-lock.json
 /yarn.lock
 .#tokenize.json
+backend/.idea
+backend/images
+backend/static

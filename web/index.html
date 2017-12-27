@@ -1,24 +1,21 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:700" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css?family=News+Cycle:700,400" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <!-- <link rel="stylesheet" href="normalize.css" > -->
     <link rel="stylesheet" href="styles.css" >
-    <title>Postcard <3</title>
     <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png" />
-    
+
+    <title>Postcard &lt;3</title>
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <link href="jquery.highlight-within-textarea.css" rel="stylesheet">
-    <script src="jquery.highlight-within-textarea.js"></script>
     
     <meta name="theme-color" content="#FF3C00">
     <meta name="msapplication-navbutton-color" content="#FF3C00">
@@ -26,14 +23,9 @@
     <meta name=" viewport-fit" content="contain">
 
     <!-- TODO: -->
-    <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->
-    
-    <style>
-     
-    </style>
+    <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->  
   </head>
-  <!-- <body onload="document.body.style.opacity='1'">     -->
-  <body id="">
+  <body>
     <div id="postcard-love">
       <section class="header upload">
         <div class="header__left" >
@@ -140,9 +132,6 @@
                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                           tabindex=5
                           data-length="400"></textarea>
-                <script>
-	        </script>
-
               </div>          
             </div>        
           </div>
@@ -217,7 +206,8 @@
             </span>
 
             <div class="submission__progress"
-                 v-if="submission.active && !submission.showError && !submission.sent">
+                 v-if="submission.active">
+              
               <div class="preloader-wrapper active">
                 <div class="spinner-layer" style="border-color: black !important;">
                   <div class="circle-clipper left">
@@ -232,12 +222,31 @@
             </div>
             
             <div class="submission__quote text--h3"
-                 v-if="!submission.active && !submission.showError && !submission.sent">
-              <div class="submission__validation" >
+                 v-if="!submission.active">
+              
+              <div class="submission__validation"
+                   v-if="validation.submit">
                 <i v-if="validation.submit && !validation.image">
                   ✖ <a href="#0-upload" tabindex="27">Please upload an image</a><br/></i>
                 <i v-if="validation.submit && !validation.human">
-                  ✖ <a href="#0-verify" tabindex="28">Please verify that you are human </a><br/></i> 
+                  ✖ <a href="#0-verify" tabindex="28">Please verify that you are human </a><br/></i>
+              </div>
+
+              <div class="submission__error__container" v-if="submission.showError">
+                <div class="submission__error" >
+                  <span class="submission__error__smiley"> :(</span>
+                  <span class="submission__error__msg text--h3">
+                    {{submission.error}}
+                  </span>
+                </div>
+              </div>
+              <div class="submission__success__container" v-if="submission.sent">
+                <div class="submission__success" >
+                  <div class="submission__success__smiley">:D</div>
+                  <div class="submission__success__msg text--h3">
+                    postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
+                  </div>
+                </div>
               </div>
               
               <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">
@@ -246,78 +255,20 @@
                 <br/>
                 <br/>
                 <br/>
+              </div>
+              <div class="submission__quote__bean" v-if="!submission.active">
                 Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch" tabindex="30">abertschi</a></i>
-              </div>
-            </div>
-            
-            <div class="submission__error__container" v-if="submission.showError && !submission.sent">
-              <div class="submission__error" >
-                <span class="submission__error__smiley"> :(</span>
-                <span class="submission__error__msg text--h3">
-                  {{submission.error}}
-                </span>
-              </div>
-            </div>
-            <div class="submission__success__container" v-if="submission.sent">
-              <div class="submission__success" >
-                <span class="submission__success__smiley">:D</span>
-                <span class="submission__success__msg text--h3">
-                  postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
-                </span>
               </div>
             </div>
           </div>
         </section>
       </form>
-    </div>
-    <script id="imageWorker" type="javascript/worker">
-     function getBase64(file, func) {
-       var reader = new FileReader();
-       reader.readAsDataURL(file);
-       reader.onload = function () {
-         func(reader.result);
-         /* console.log(reader.result);*/
-       };
-       reader.onerror = function (error) {
-         console.log('Error: ', error);
-       };
-     };     
-    </script>
-
-    <script type="text/javascript">
-
-    </script>
-    
+    </div>    
     <script>
      var vue;
      function recaptcha_callback(){
        vue.validation.human = true;
      }
-
-     $(function() {
-       // https://stackoverflow.com/questions/1125482/
-       // how-to-impose-maxlength-on-textarea-in-html-using-javascript
-       // Get all textareas that have a "maxlength" property.
-       $('textarea[maxlength]').each(function() {
-
-         // Store the jQuery object to be more efficient...
-         var $textarea = $(this);
-
-         // Store the maxlength and value of the field.
-         var maxlength = $textarea.attr('maxlength');
-         var val = $textarea.val();
-
-         // Trim the field if it has content over the maxlength.
-         $textarea.val(val.slice(0, maxlength));
-
-         // Bind the trimming behavior to the "keyup" event.
-         $textarea.bind('keyup', function() {
-           $textarea.val($textarea.val().slice(0, maxlength));
-         });
-
-       });
-     });
-     
      (function(){
        vue = new Vue({
          el: '#postcard-love',
@@ -350,17 +301,9 @@
              handler() {
                localStorage.setItem('love', JSON.stringify(this.love));
                this.validation.image = this.love.pictures.length > 0;
-               console.log('val ' + this.validation.image);
              },
              deep: true,
            },
-
-           validation: {
-             handler() {
-
-             },
-             deep: true,
-           }
          },
          
          mounted() {
@@ -368,17 +311,8 @@
              this.love = JSON.parse(localStorage.getItem('love')) || [];
            }
            this.validation.image = this.love.pictures.length > 0;
-           
-           let blob = new Blob([document.querySelector('#imageWorker').textContent]);
-           this.imageWorker = new Worker(window.URL.createObjectURL(blob));
-           let that = this;
-
-           this.imageWorker.onmessage = function(e) {
-             if (e.data.cmd == 'process_done') {
-               let data = e.data.data;
-             }
-           }
          },
+         
          methods: {           
            scrollToImageUpload: function() {
              $('html,body').animate({
@@ -388,6 +322,10 @@
            resetUserInput: function() {
              this.love.pictures = [];
              this.love.message = '';
+             this.validation.human = false;
+             this.validation.image = false;
+             grecaptcha.reset();
+             $('#recaptcha_reload').click();
            },
 
            imageDragOverHandler: function(event) {
@@ -463,38 +401,48 @@
            
            send: function() {
              this.validation.submit = true;
+             this.submission.sent = false;
+             this.submission.showError = false;
              if (this.validation.human && this.validation.image) {
                this.submission.active = true;
+               this.validation.submit = false;
                
                let form = document.getElementById("form");
                var data = new FormData(form);
-           
+               
                let payload = {
                  message: this.love.message,
                  name: this.love.name,
                  secret: this.love.secret,
+                 pictures: this.love.pictures,
                  'g-recaptcha-response': grecaptcha.getResponse()
                };
 
                let that = this;
+               let url = '/api/submit';
                $.ajax({
-                 url: "/api/submit",
+                 url: url,
                  data: JSON.stringify(payload),
                  dataType: "json",
                  cache: false,
                  contentType: "application/json; charset=utf-8",
                  type: 'POST',
                  success: function(data){
-                   alert(data);
+                   that.submission.active = false;
+                   that.submission.sent = true;
                    that.resetUserInput();
+                   if (data.responseJSON) {
+                     console.log(data.responseJSON);
+                   }
                  },
                  error: function(err) {
-                   that.submission.error = err.responseText;
-                   that.submission.showError = true;
+                   console.log(err);
+                   if (err.responseJSON) {
+                     let error = err.responseJSON;
+                     that.submission.error = error.error;
+                     that.submission.showError = true;
+                   }
                  },
-                 done: function(data) {
-                   that.submission.active = false;
-                 }
                });
              }
            },
@@ -502,30 +450,12 @@
            resizeImage: function (file, callback) {
              const MAX_WIDTH = 1500;
              const MAX_HEIGHT = 1000;
-             console.log(file);
+             
              var reader = new FileReader();
              reader.onloadend = function() {
                var tempImg = new Image();
                tempImg.src = reader.result;
-               tempImg.onload = function() {
-
-                 let orientation = '';
-                 if (tempImg.naturalWidth > tempImg.naturalHeight) {
-                   orientation = 'landscape';
-                 } else if (tempImg.naturalWidth < tempImg.naturalHeight) {
-                   orientation = 'portrait';
-                 } else {
-                   orientation = 'even';
-                 }
-
-                 console.log('orientation: ' + orientation);
-                 
-
-                 var origW = tempImg.width;
-                 var origH = tempImg.height;
-
-                 console.log('orign: ' + origW + 'x' + origH);
-                 
+               tempImg.onload = function() {                 
                  var tempW = tempImg.width;
                  var tempH = tempImg.height;
                  
@@ -547,15 +477,6 @@
 
                  var ctx = canvas.getContext("2d");
                  ctx.drawImage(this, 0, 0, tempW, tempH);
-                 console.log('canvas: ' + canvas.width + 'x' + canvas.height);
-                 
-                 function isPortrait(img) {
-                   var w = img.naturalWidth || img.width,
-                       h = img.naturalHeight || img.height;
-                   return (h > w);
-                 }
-                 console.log('is portrait: ' + isPortrait(tempImg));
-
                  
                  function drawRotated(ctx, degrees){
                    ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -566,9 +487,7 @@
                    ctx.restore();
                  }
 
-                 
                  var dataURL = canvas.toDataURL("image/png");
-
                  callback(dataURL);
                }    
              }
@@ -577,38 +496,22 @@
          }
        });
        
-       $('#droptarget').click(function() {
-         $('#pictures').click();
-       });
-
-       $('#upload__title').click(function() {
+       $('#droptarget, #upload__title').click(function() {
          $('#pictures').click();
        });
        
-
-       $("").mouseover(function(){
-         // $("#b").css("background-color", "red");
+       $(function() {
+         $('textarea[maxlength]').each(function() {
+           var $textarea = $(this);
+           var maxlength = $textarea.attr('maxlength');
+           var val = $textarea.val();
+           $textarea.val(val.slice(0, maxlength));
+           $textarea.bind('keyup', function() {
+             $textarea.val($textarea.val().slice(0, maxlength));
+           });
+         });
        });
-       
-     }());
-     
-     /* let dropTarget = document.getElementById('droptarget');
-      * dropTarget.addEventListener('dragover', dragOver, false);
-      * dropTarget.addEventListener('drop', drop_handler, false);
-      * */
-     /*
-        TODO:
-        [ ] - file upload, show picture(s)
-        [ ] - downsize images?
-        [ ] - crop images?
-        [ ] - form submit
-        [ ] - implement state to remember message, picture, secret and name
-        [ ] - vue.js
-      */
-
-     // http://code.hootsuite.com/html5/
-     // https://www.codeforest.net/html5-image-upload-resize-and-crop
-     // https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+     }());     
     </script>
   </body>
 </html>
