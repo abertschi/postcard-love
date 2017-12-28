@@ -242,7 +242,8 @@
                 <div class="submission__success" >
                   <!-- <div class="submission__success__smiley">:D</div> -->
                   <div class="submission__success__msg text--h3">
-                    postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
+                    postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span> <br/>
+                    {{submission.successMessage}}
                   </div>
                 </div>
               </div>
@@ -290,6 +291,7 @@
            submission: {
              active: false,
              error: '',
+             successMessage: '',
              showError: false,
              sent: false
            }
@@ -429,9 +431,11 @@
                    that.submission.active = false;
                    that.submission.sent = true;
                    that.resetUserInput();
-                   if (data.responseJSON) {
-                     console.log(data.responseJSON);
+                   console.log(data);
+                   if (data.message) {
+                     that.submission.successMessage = data.message;
                    }
+                   console.log(data);  
                  },
                  error: function(err) {
                    console.log(err);

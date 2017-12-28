@@ -14,15 +14,15 @@ import logging
 import settings
 import db_access
 
-app = Flask(__name__, static_url_path='../static')
-app.debug = True
 logger = logging.getLogger('postcard-love')
+VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 RECAPTCHA_HOST = 'https://www.google.com/recaptcha/api/siteverify'
+
+app = Flask(__name__, static_url_path='')
+app.debug = True
 
 if not os.path.exists(settings.BASEDIR_PICTURES):
     os.makedirs(settings.BASEDIR_PICTURES)
-
-VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 
 
 class InvalidPictureException(Exception):
@@ -73,6 +73,12 @@ def api_submit():
             logger.error('/api/submit captcha wrong')
             return jsonify(error='Captcha is wrong 🙊'), 400
 
+        response_msg = ''
+        if len(payload.get('pictures')) > 1 and \
+                not has_valid_secret(payload.get('secret')):
+            payload['pictures'] = [payload['pictures'][0]]
+            response_msg = 'without valid secret, only first picture is printed out'
+
         try:
             process_postcard_request(payload)
         except InvalidPictureException:
@@ -80,10 +86,14 @@ def api_submit():
 
         return jsonify({
             'success': True,
-            'message': 'Postcard sent! 🎉'
+            'message': response_msg or ''
         }), 200
 
     pass
+
+
+def has_valid_secret(secret):
+    return False
 
 
 def process_postcard_request(payload):

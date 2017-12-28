@@ -4,6 +4,7 @@ import settings
 import random
 import sys
 from postcard_creator.postcard_creator import Token, PostcardCreator, Postcard, Recipient, Sender
+from xml.sax.saxutils import escape
 
 logger = logging.getLogger('send_job')
 
@@ -36,8 +37,8 @@ def create_api_sender(db_postcard):
     sender_lastname = db_postcard.recipient.lastname \
         if sender_firstname is not db_postcard.recipient.fistname else ''
 
-    return Sender(prename=sender_firstname,
-                  lastname=sender_lastname,
+    return Sender(prename=escape(sender_firstname),
+                  lastname=escape(sender_lastname),
                   street=db_postcard.street,
                   zip_code=db_postcard.zipcode,
                   place=db_postcard.city)
@@ -60,7 +61,7 @@ def send_cards(api_wrappers, db_cards):
         api_card = Postcard(sender=create_api_sender(pending_card),
                             recipient=create_api_recipient(pending_card),
                             picture_stream=api_picture_stream,
-                            message=api_message)
+                            message=escape(api_message))
 
         response = api_wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
         if response:
