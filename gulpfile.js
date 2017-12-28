@@ -12,10 +12,12 @@ var htmlReaplce = require('gulp-html-replace');
 var htmlMin = require('gulp-htmlmin');
 var del = require('del');
 var sequence = require('run-sequence');
+var minifyInline = require('gulp-minify-inline');
 
 let target = './backend/static/';
 var config = {
   dist: target,
+  watch: 'web/**/*.{html,css,js.jpg,jpeg,png,gif.svg}',
   src: 'web/',
   cssin: 'web/**/*.css',
   jsin: 'web/**/*.js',
@@ -86,6 +88,7 @@ gulp.task('html', function() {
                'css': config.cssreplaceout,
                'js': config.jsreplaceout
              }))
+             .pipe(minifyInline())
              .pipe(htmlMin({
                sortAttributes: true,
                sortClassName: true,
@@ -98,8 +101,18 @@ gulp.task('clean', function() {
   return del([config.dist]);
 });
 
+gulp.task('watch', function() {
+  sequence('build');
+
+  var watcher = gulp.watch(config.watch, ['html', 'js', 'css', 'img']);
+  watcher.on('change', function(event) {
+    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  });
+});
+
 gulp.task('build', function() {
   sequence('clean', ['html', 'js', 'css', 'img']);
 });
+
 
 gulp.task('default', ['serve']);
