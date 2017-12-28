@@ -2,6 +2,7 @@ import sqlite3
 from pony.orm import *
 import time, datetime
 from postcard_creator.postcard_creator import Recipient
+import settings
 
 db = Database()
 db.bind(provider='sqlite', filename='postcard-love.sqlite', create_db=True)
@@ -50,7 +51,7 @@ class DbPostcard(db.Entity):
 
 
 db.generate_mapping(create_tables=True)
-set_sql_debug(True)
+set_sql_debug(settings.DB_DEBUG)
 
 
 @db_session
@@ -98,6 +99,11 @@ def get_pending_postcards(limit=10):
     cards = select(c for c in DbPostcard if c.is_sent is False) \
                 .sort_by(desc(DbPostcard.priority))[:limit]
 
+    for c in cards:
+        # load collection so that not proxied outside of db_session
+        # TODO: is there a better way to do this?
+        c.recipient.firstname
+
     return cards
 
 
@@ -107,6 +113,13 @@ def mark_postcard_as_sent(postcard_id):
     card.is_sent = True
     card.send_date = datetime.datetime.now()
 
+@db_session
+def get_size_of_pending_postcards():
+    return len(select(p for p in DbPostcard if p.is_sent is False)[:])
+
+@db_session
+def get_size_of_all_postcards():
+    return len(select(p for p in DbPostcard)[:])
 
 @db_session
 def print_all_postcards():

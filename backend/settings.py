@@ -2,6 +2,7 @@ import os
 
 CAPTCHA_SECRET = ''
 MOCK_SEND = False
+DB_DEBUG = False
 
 POST_ACCOUNTS = [
     {

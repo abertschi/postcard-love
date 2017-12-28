@@ -19,7 +19,7 @@ VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 RECAPTCHA_HOST = 'https://www.google.com/recaptcha/api/siteverify'
 
 app = Flask(__name__, static_url_path='')
-app.debug = True
+# app.debug = True
 
 if not os.path.exists(settings.BASEDIR_PICTURES):
     os.makedirs(settings.BASEDIR_PICTURES)

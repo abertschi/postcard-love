@@ -1,10 +1,13 @@
-from db_access import get_pending_postcards, DbPostcard, DbRecipient, mark_postcard_as_sent
+from db_access import get_pending_postcards, DbPostcard, DbRecipient, \
+    mark_postcard_as_sent, get_size_of_pending_postcards
 import logging
 import settings
 import random
 import sys
+import os
 from postcard_creator.postcard_creator import Token, PostcardCreator, Postcard, Recipient, Sender
 from xml.sax.saxutils import escape
+import json
 
 logger = logging.getLogger('send_job')
 
@@ -19,11 +22,11 @@ def process():
     random.shuffle(api_wrappers)
     pending_cards = get_pending_postcards(limit=len(api_wrappers))
     sent_cards = send_cards(api_wrappers, pending_cards)
-    logger.info('{} postcards ({}) are sent'.format(len(sent_cards), sent_cards))
+    logger.info('{}/{} postcards ({}) are sent'.format(len(sent_cards), get_size_of_pending_postcards(), sent_cards))
 
 
 def create_api_recipient(db_postcard):
-    return Recipient(prename=db_postcard.recipient.fistname,
+    return Recipient(prename=db_postcard.recipient.firstname,
                      lastname=db_postcard.recipient.lastname,
                      street=db_postcard.recipient.street,
                      zip_code=db_postcard.recipient.zipcode,
@@ -31,17 +34,18 @@ def create_api_recipient(db_postcard):
 
 
 def create_api_sender(db_postcard):
-    sender_firstname = db_postcard.sender_name \
-        if db_postcard.sender_name else db_postcard.recipient.fistname
+    sender_firstname = db_postcard.sender_name if \
+        db_postcard.sender_name else db_postcard.recipient.firstname
 
-    sender_lastname = db_postcard.recipient.lastname \
-        if sender_firstname is not db_postcard.recipient.fistname else ''
+    sender_lastname = '' if \
+        sender_firstname is not db_postcard.recipient.firstname \
+        else db_postcard.recipient.lastname
 
     return Sender(prename=escape(sender_firstname),
                   lastname=escape(sender_lastname),
-                  street=db_postcard.street,
-                  zip_code=db_postcard.zipcode,
-                  place=db_postcard.city)
+                  street=db_postcard.recipient.street,
+                  zip_code=db_postcard.recipient.zipcode,
+                  place=db_postcard.recipient.city)
 
 
 def send_cards(api_wrappers, db_cards):
@@ -55,7 +59,9 @@ def send_cards(api_wrappers, db_cards):
         pending_card = db_cards[card_i]
         card_i = card_i + 1
 
-        api_picture_stream = None
+        file = os.path.join(settings.BASEDIR_PICTURES, pending_card.picture_path)
+        logger.debug('uploading file {}'.format(file))
+        api_picture_stream = open(file, 'rb')
         api_message = pending_card.message
 
         api_card = Postcard(sender=create_api_sender(pending_card),
@@ -65,7 +71,7 @@ def send_cards(api_wrappers, db_cards):
 
         response = api_wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
         if response:
-            logger.info('postcard id:{} is sent'.format(pending_card.id))
+            logger.debug('postcard id:{} is sent'.format(pending_card.id))
             mark_postcard_as_sent(postcard_id=pending_card.id)
             sent_cards.append(pending_card.id)
 
@@ -96,6 +102,7 @@ def _get_pcc_wrapper(stop_on_first_valid=True):
                            'for {}'.format(account.get("username")))
 
     return pcc_wrappers, try_again_after
+
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=logging.INFO)
