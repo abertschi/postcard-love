@@ -13,3 +13,4 @@ backend/static
 settings_local.py
 secret.py
 postcard-love.sqlite
+backend/secrets
