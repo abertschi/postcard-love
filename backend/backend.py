@@ -13,6 +13,9 @@ import sys
 import logging
 import settings
 import db_access
+import secret_handler
+from xml.sax.saxutils import escape
+from xml.dom.minidom import Text, Element
 
 logger = logging.getLogger('postcard-love')
 VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
@@ -74,10 +77,13 @@ def api_submit():
             return jsonify(error='Captcha is wrong 🙊'), 400
 
         response_msg = ''
+        secret = payload.get('secret')
+        is_valid_secret = secret_handler.is_valid_secret(secret)
+
         if len(payload.get('pictures')) > 1 and \
-                not has_valid_secret(payload.get('secret')):
+                not is_valid_secret:
             payload['pictures'] = [payload['pictures'][0]]
-            response_msg = 'without valid secret, only first picture is printed out'
+            response_msg = response_msg + ' only first picture is printed out. '
 
         try:
             process_postcard_request(payload)
@@ -97,11 +103,16 @@ def has_valid_secret(secret):
 
 
 def process_postcard_request(payload):
-    message = payload.get('message') or ''
-    message = message[:400]
-    sender = payload.get('name') or ''
-    sender = sender[:40]
     picture_paths = []
+    message = escape(payload.get('message') or '')[:400]
+    sender = escape(payload.get('name') or '')[:40]
+    secret = ''
+    priority = 0
+
+    if secret_handler.is_valid_secret(payload.get('secret')):
+        secret = payload.get('secret')[:1024]
+        priority = secret_handler.get_priority(secret)
+
     identifier = 'p-' + datetime.datetime.now().strftime("%f")
 
     for picture in payload.get('pictures'):
@@ -112,7 +123,7 @@ def process_postcard_request(payload):
         raise InvalidPictureException  # raise exception if all pictures are invalid
 
     store_postcard(message, sender, picture_paths, recipient=settings.RECIPIENT_DEFAULT,
-                   identifier=identifier)
+                   identifier=identifier, secret=secret, priority=priority)
 
 
 def store_postcard(message, sender_name, picture_paths, recipient, identifier='', secret='', priority=0):
