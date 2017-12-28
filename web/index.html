@@ -1,3 +1,4 @@
+<!-- made with much <3 by bean, www.abertschi.ch -->
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -233,16 +234,13 @@
               </div>
 
               <div class="submission__error__container" v-if="submission.showError">
-                <div class="submission__error" >
-                  <span class="submission__error__smiley"> :(</span>
-                  <span class="submission__error__msg text--h3">
-                    {{submission.error}}
-                  </span>
+                <div class="submission__error text--h3" >
+                  Whoopsie. {{submission.error}}
                 </div>
               </div>
               <div class="submission__success__container" v-if="submission.sent">
                 <div class="submission__success" >
-                  <div class="submission__success__smiley">:D</div>
+                  <!-- <div class="submission__success__smiley">:D</div> -->
                   <div class="submission__success__msg text--h3">
                     postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span>
                   </div>
@@ -437,11 +435,17 @@
                  },
                  error: function(err) {
                    console.log(err);
+                   that.submission.active = false;
+                   that.submission.showError = true;
+                   msg = err.responseText;
                    if (err.responseJSON) {
                      let error = err.responseJSON;
-                     that.submission.error = error.error;
-                     that.submission.showError = true;
+                     if (error.error) {
+                       msg = error.error;
+                     }
                    }
+                   msg += ' (' + err.status + ')';
+                   that.submission.error = msg;
                  },
                });
              }
