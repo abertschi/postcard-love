@@ -13,6 +13,7 @@ var htmlMin = require('gulp-htmlmin');
 var del = require('del');
 var sequence = require('run-sequence');
 var minifyInline = require('gulp-minify-inline');
+var gulpCopy = require('gulp-copy');
 
 let target = './backend/static/';
 var config = {
@@ -21,6 +22,7 @@ var config = {
   src: 'web/',
   cssin: 'web/**/*.css',
   jsin: 'web/**/*.js',
+  jsinlibs: 'web/scripts/*.js',
   imgin: 'web/img/**/*.{jpg,jpeg,png,gif,svg}',
   htmlin: 'web/**/*.html',
   scssin: 'web/**/*.scss',
@@ -28,6 +30,7 @@ var config = {
   jsout: target  + '',
   imgout: target + 'img/',
   htmlout: target + '',
+  jsoutlibs: target + 'scripts/',
   scssout: 'web/',
   cssoutname: 'styles.css',
   jsoutname: 'dist.js',
@@ -75,6 +78,11 @@ gulp.task('js', function() {
              .pipe(gulp.dest(config.jsout));
 });
 
+gulp.task('copy-js-libs', function(){
+  return  gulp.src(config.jsinlibs)
+              .pipe(gulp.dest(config.jsoutlibs));
+});
+
 gulp.task('img', function() {
   return gulp.src(config.imgin)
              .pipe(changed(config.imgout))
@@ -104,14 +112,14 @@ gulp.task('clean', function() {
 gulp.task('watch', function() {
   sequence('build');
 
-  var watcher = gulp.watch(config.watch, ['html', 'js', 'css', 'img']);
+  var watcher = gulp.watch(config.watch, ['html', 'js', 'copy-js-libs', 'css', 'img']);
   watcher.on('change', function(event) {
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
   });
 });
 
 gulp.task('build', function() {
-  sequence('clean', ['html', 'js', 'css', 'img']);
+  sequence('clean', ['html', 'js', 'copy-js-libs', 'css', 'img']);
 });
 
 

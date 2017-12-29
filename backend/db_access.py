@@ -1,10 +1,11 @@
-import sqlite3
 from pony.orm import *
-import time, datetime
+import datetime
 from postcard_creator.postcard_creator import Recipient
 import settings
 import logging
 import sys
+
+logger = logging.getLogger('postcard-love')
 
 db = Database()
 db.bind(provider='sqlite', filename='postcard-love.sqlite', create_db=True)
@@ -115,13 +116,16 @@ def mark_postcard_as_sent(postcard_id):
     card.is_sent = True
     card.send_date = datetime.datetime.now()
 
+
 @db_session
 def get_size_of_pending_postcards():
     return len(select(p for p in DbPostcard if p.is_sent is False)[:])
 
+
 @db_session
 def get_size_of_all_postcards():
     return len(select(p for p in DbPostcard)[:])
+
 
 @db_session
 def print_all_postcards():

@@ -5,6 +5,7 @@ click==6.7
 cookies==2.2.1
 emoji==0.4.5
 Flask==0.12.2
+flask-request-id-middleware==1.1
 gunicorn==19.7.1
 idna==2.6
 itsdangerous==0.24
