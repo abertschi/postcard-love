@@ -22,6 +22,6 @@ Browse https://postcard.abertschi.ch
 - https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
 
 ## About
-Made with much <3 by Andrin Bertschi
+Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
