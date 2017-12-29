@@ -22,7 +22,7 @@ VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 RECAPTCHA_HOST = 'https://www.google.com/recaptcha/api/siteverify'
 
 app = Flask(__name__, static_url_path='')
-# app.debug = True
+app.debug = settings.REST_DEBUG
 
 if not os.path.exists(settings.BASEDIR_PICTURES):
     os.makedirs(settings.BASEDIR_PICTURES)
@@ -96,10 +96,6 @@ def api_submit():
         }), 200
 
     pass
-
-
-def has_valid_secret(secret):
-    return False
 
 
 def process_postcard_request(payload):

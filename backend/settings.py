@@ -5,6 +5,7 @@ from collections import defaultdict
 CAPTCHA_SECRET = ''
 MOCK_SEND = False
 DB_DEBUG = False
+REST_DEBUG = False
 
 POST_ACCOUNTS = [
     {
