@@ -73,7 +73,7 @@ def api_submit():
         captcha_response = resp.json()
         if resp.status_code is not 200 or \
                 not captcha_response.get('success'):
-            logger.error('/api/submit captcha wrong')
+            logger.error('/api/submit captcha wrong. {}'.format(captcha_response))
             return jsonify(error='Captcha is wrong 🙊'), 400
 
         response_msg = ''
