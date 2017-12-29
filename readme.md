@@ -19,6 +19,6 @@ Browse https://postcard.abertschi.ch
   + pony orm
 
 ## About
-Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschiy
+Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
