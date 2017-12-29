@@ -1,5 +1,5 @@
 # postcard-love
-> say hi and send me a physical postcard
+> Say hi and send me a physical postcard for free
 
 Browse https://postcard.abertschi.ch
 
