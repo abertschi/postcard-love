@@ -9,8 +9,10 @@ Browse https://postcard.abertschi.ch
 
 ## Technology stack
 - Frontend
-  + html5, js, css
+  + mobile first
+  + html, js, css
   + vue.js
+  + localstorage
   + webpack and gulp.js
 - Backend
   + Python3+

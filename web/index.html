@@ -17,11 +17,32 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+    <script src="./scripts/snowstorm-min.js"></script>
     
     <meta name="theme-color" content="#FF3C00">
     <meta name="msapplication-navbutton-color" content="#FF3C00">
     <meta name="apple-mobile-web-app-status-bar-style" content="#FF3C00">
     <meta name=" viewport-fit" content="contain">
+
+    <script>
+     (function(){
+       var d = new Date();
+       var m = d.getMonth()
+       m = m + 1;
+       if (m >= 12 || m <= 1) { 
+         snowStorm.excludeMobile = false;
+         snowStorm.autoStart = true;
+         /* snowStorm.flakeBottom = null;*/
+         snowStorm.followMouse = false;
+         snowStorm.flakesMaxActive = 10;
+       }
+       else {
+         snowStorm.stop();
+         snowStorm.autoStart = false;
+       }
+     })();
+    </script>
 
     <!-- TODO: -->
     <!-- https://codyhouse.co/gem/vertical-fixed-navigation-2/ -->  
