@@ -16,12 +16,7 @@ Browse https://postcard.abertschi.ch
   + sqllite3
   + pony orm
 
-## Some interesting resources
-- http://code.hootsuite.com/html5/
-- https://www.codeforest.net/html5-image-upload-resize-and-crop
-- https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
-
 ## About
-Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
+Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschiy
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
