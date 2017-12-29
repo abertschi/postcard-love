@@ -1,3 +1,5 @@
+()[![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)]
+
 # postcard-love
 > Say hi and send me a physical postcard for free
 
