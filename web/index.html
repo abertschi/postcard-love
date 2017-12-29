@@ -26,7 +26,7 @@
     <meta name=" viewport-fit" content="contain">
 
     <script>
-     (function(){
+     (function(snowStorm){
        var d = new Date();
        var m = d.getMonth()
        m = m + 1;
@@ -41,7 +41,7 @@
          snowStorm.stop();
          snowStorm.autoStart = false;
        }
-     })();
+     })(window.snowStorm);
     </script>
 
     <!-- TODO: -->
