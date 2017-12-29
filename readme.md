@@ -19,7 +19,8 @@ Browse https://postcard.abertschi.ch
   + pony orm
 
 ## About
-![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
 Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
+
+![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
