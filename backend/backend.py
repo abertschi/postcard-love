@@ -2,40 +2,40 @@ from flask import Flask, request, jsonify
 import requests
 import base64
 import os
-from time import gmtime, strftime
 import datetime
 import string
 import imghdr
-import postcard_creator
 import random
-import hashlib
-import sys
 import logging
 import settings
 import db_access
 import secret_handler
 from xml.sax.saxutils import escape
-from xml.dom.minidom import Text, Element
+from flask_request_id import RequestID
+import sys
 
 logger = logging.getLogger('postcard-love')
 VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 RECAPTCHA_HOST = 'https://www.google.com/recaptcha/api/siteverify'
 
 app = Flask(__name__, static_url_path='')
+RequestID(app)
 app.debug = settings.REST_DEBUG
 
 if not os.path.exists(settings.BASEDIR_PICTURES):
     os.makedirs(settings.BASEDIR_PICTURES)
 
 
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        record.url = request.url if request else '-'
+        record.remote_addr = request.remote_addr if request else '-'
+        record.request_id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
+        return super().format(record)
+
+
 class InvalidPictureException(Exception):
     pass
-
-
-@app.after_request
-def add_header(response):
-    response.cache_control.max_age = 0
-    return response
 
 
 @app.route('/')
@@ -50,50 +50,52 @@ def meh():
 
 @app.route('/api/submit', methods=['POST'])
 def api_submit():
-    if request.get_json() is not None:
-        payload = request.get_json()
+    if request.get_json() is None:
+        return jsonify(error='No request body given'), 400
 
-        required_args = ['g-recaptcha-response', 'pictures']
-        for required in required_args:
-            if not required in payload:
-                logger.error('/api/submit required parameter {} missing'.format(required))
-                return jsonify(error='Required parameter "{}" is missing 🙊'
-                               .format(required)), 400
+    payload = request.get_json()
+    required_args = ['g-recaptcha-response', 'pictures']
+    for required in required_args:
+        if not required in payload:
+            logger.error('/api/submit required parameter {} missing'.format(required))
+            return jsonify(error='Required parameter "{}" is missing 🙊'
+                           .format(required)), 400
 
-        for picture in payload.get('pictures'):
-            if not picture.get('src'):
-                logger.error('/api/submit picture without src argument')
-                return jsonify(error='Invalid picture given. Picture without src argument 🙊'), 400
+    for picture in payload.get('pictures'):
+        if not picture.get('src'):
+            logger.error('/api/submit picture without src argument')
+            return jsonify(error='Invalid picture given. Picture without src argument 🙊'), 400
 
-        data = {
-            'secret': settings.CAPTCHA_SECRET,
-            'response': payload.get('g-recaptcha-response')
-        }
-        resp = requests.post(RECAPTCHA_HOST, data=data)
-        captcha_response = resp.json()
-        if resp.status_code is not 200 or \
-                not captcha_response.get('success'):
-            logger.error('/api/submit captcha wrong. {}'.format(captcha_response))
-            return jsonify(error='Captcha is wrong 🙊'), 400
+    data = {
+        'secret': settings.CAPTCHA_SECRET,
+        'response': payload.get('g-recaptcha-response')
+    }
+    resp = requests.post(RECAPTCHA_HOST, data=data)
+    captcha_response = resp.json()
+    if resp.status_code is not 200 or \
+            not captcha_response.get('success'):
+        logger.error('Captcha wrong. {}'.format(captcha_response))
+        return jsonify(error='Captcha is wrong 🙊'), 400
 
-        response_msg = ''
-        secret = payload.get('secret')
-        is_valid_secret = secret_handler.is_valid_secret(secret)
+    response_msg = ''
+    secret = payload.get('secret')
+    is_valid_secret = secret_handler.is_valid_secret(secret)
 
-        if len(payload.get('pictures')) > 1 and \
-                not is_valid_secret:
-            payload['pictures'] = [payload['pictures'][0]]
-            response_msg = response_msg + ' only first picture is printed out. '
+    if len(payload.get('pictures')) > 1 and \
+            not is_valid_secret:
+        payload['pictures'] = [payload['pictures'][0]]
+        response_msg = response_msg + ' only first picture is printed out.'
+        logger.info('only first picture is printed out')
 
-        try:
-            process_postcard_request(payload)
-        except InvalidPictureException:
-            return jsonify(error='Invalid picture given 🙊'), 400
+    try:
+        process_postcard_request(payload)
+    except InvalidPictureException:
+        return jsonify(error='Invalid picture given 🙊'), 400
 
-        return jsonify({
-            'success': True,
-            'message': response_msg or ''
-        }), 200
+    return jsonify({
+        'success': True,
+        'message': response_msg or ''
+    }), 200
 
     pass
 
@@ -178,5 +180,8 @@ def to_valid_filename(name):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    logging.basicConfig(level=logging.INFO,
+                        stream=sys.stdout,
+                        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+                        datefmt="%Y-%m-%d %H:%M:%S")
     app.run(host='0.0.0.0', port=5000)

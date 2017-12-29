@@ -3,6 +3,8 @@ from pony.orm import *
 import time, datetime
 from postcard_creator.postcard_creator import Recipient
 import settings
+import logging
+import sys
 
 db = Database()
 db.bind(provider='sqlite', filename='postcard-love.sqlite', create_db=True)
@@ -131,7 +133,9 @@ def print_all_postcards():
 
 @db_session
 def print_pending_postcards():
+    print('='[:1] * 50)
     print('showing pending postcards')
+    print('='[:1] * 50)
     DbRecipient.select().show(width=1000)
     DbPostcardGroup.select().show(width=1000)
     select(p for p in DbPostcard if p.is_sent is False).show(width=1000)
@@ -139,7 +143,9 @@ def print_pending_postcards():
 
 @db_session
 def print_sent_postcards():
+    print('='[:1] * 50)
     print('showing sent postcards')
+    print('='[:1] * 50)
     DbRecipient.select().show(width=1000)
     DbPostcardGroup.select().show(width=1000)
     select(p for p in DbPostcard if p.is_sent is True) \
@@ -147,10 +153,16 @@ def print_sent_postcards():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO,
+                        stream=sys.stdout,
+                        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+                        datefmt="%Y-%m-%d %H:%M:%S")
+
     p = StorePostcardRequest(message='hi', picture_path='./test')
     r = Recipient(prename='prename', lastname='lastname', street='street', zip_code=0, place='NN')
     # store_postcard(p, r)
     # mark_postcard_as_sent(100)
+
     print_pending_postcards()
     print_sent_postcards()
     pass

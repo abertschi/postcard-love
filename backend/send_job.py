@@ -147,5 +147,9 @@ def _get_pcc_wrapper(stop_on_first_valid=True):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    logging.basicConfig(level=logging.INFO,
+                        stream=sys.stdout,
+                        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+                        datefmt="%Y-%m-%d %H:%M:%S")
+
     process()
