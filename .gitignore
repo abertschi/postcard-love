@@ -14,4 +14,4 @@ settings_local.py
 secret.py
 postcard-love.sqlite
 backend/secrets
-venv
+venv__pycache__
