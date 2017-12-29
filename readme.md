@@ -6,7 +6,7 @@ Browse https://postcard.abertschi.ch
 <img src='./.assets/img1.png' widht=200/>
 
 ## Technology stack
-![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
+![build in emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
 
 - Frontend
   + html5, js, css
