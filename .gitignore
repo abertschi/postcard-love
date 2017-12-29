@@ -16,3 +16,4 @@ postcard-love.sqlite
 backend/secrets
 venv
 __pycache__
+backend/scripts/prod-*
