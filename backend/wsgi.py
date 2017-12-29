@@ -14,5 +14,4 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         handlers=[ch],
                         datefmt="%Y-%m-%d %H:%M:%S")
-
     app.run()
