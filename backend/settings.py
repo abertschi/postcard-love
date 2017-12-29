@@ -1,6 +1,6 @@
 import os
 from collections import defaultdict
-
+import logging
 
 CAPTCHA_SECRET = ''
 MOCK_SEND = False
@@ -28,4 +28,5 @@ SECRETS_MAP = defaultdict(set)
 try:
     from secrets.settings_local import *
 except ImportError:
+    logging.getLogger('settings').warn('no local settings found')
     pass
