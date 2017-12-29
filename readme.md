@@ -6,6 +6,8 @@ Browse https://postcard.abertschi.ch
 <img src='./.assets/img1.png' widht=200/>
 
 ## Technology stack
+![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
+
 - Frontend
   + html5, js, css
   + vue.js
@@ -21,6 +23,5 @@ Browse https://postcard.abertschi.ch
 ## About
 Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
 
-![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
