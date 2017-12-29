@@ -1,5 +1,3 @@
-![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)
-
 # postcard-love
 > Say hi and send me a physical postcard for free
 
@@ -21,6 +19,7 @@ Browse https://postcard.abertschi.ch
   + pony orm
 
 ## About
+![build with emacs](https://img.shields.io/badge/built%20with-emacs-orange.svg)  
 Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
