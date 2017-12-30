@@ -3,7 +3,9 @@
 
 Browse https://postcard.abertschi.ch  
 
-<img src='./.assets/img1.png' widht=200/>
+<a href="https://postcard.abertschi.ch"><img src='./.assets/img1.png' widht=200/></a>
+
+[Browse more design assets](./.assets/postcard-love-ui.pdf)
 
 ## Technology stack
 ![build in emacs](https://img.shields.io/badge/built%20in-emacs-orange.svg)  
@@ -17,6 +19,7 @@ Browse https://postcard.abertschi.ch
 - Backend
   + Python3+
   + Flask
+  + letsencrypt
   + nginx, gunicorn
 - Database
   + sqllite3
