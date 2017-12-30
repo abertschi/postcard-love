@@ -188,6 +188,7 @@ def create_msg(msg):
     if not ip or ip == b'':
         ip = request.headers.get('HTTP_X_FORWARDED_FOR')[:100] if request else '-'
 
+    logger.info(request.headers.__dict__)
     return "[{}] [{}] [{}]: {}".format(id, ip, url, msg)
 
 
