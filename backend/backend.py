@@ -40,7 +40,6 @@ def serve():
 
 @app.route('/api/submit', methods=['GET'])
 def meh():
-    logger.info(request.headers.__dict__)
     return random.choice(['ಠ_ಠ', '(ง\'̀-\'́)ง', '◉_◉', '┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻'])
 
 
@@ -183,12 +182,9 @@ def create_msg(msg):
     url = request.url if request else '-'
     id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
     ip = request.remote_addr if request else None
-    logger.info('ip: ' + str(ip))
-    logger.info('forwarded: ' + str(request.headers.get('HTTP_X_FORWARDED_FOR')))
-    if not ip or ip == b'':
-        ip = request.headers.get('HTTP_X_FORWARDED_FOR')[:100] if request else '-'
+    if not ip:
+        ip = request.environ.get('HTTP_X_FORWARDED_FOR')[:200] if request else '-'
 
-    logger.info(request.headers.__dict__)
     return "[{}] [{}] [{}]: {}".format(id, ip, url, msg)
 
 
