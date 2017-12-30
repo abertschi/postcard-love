@@ -50,15 +50,16 @@ def api_submit():
 
     payload = request.get_json()
     required_args = ['g-recaptcha-response', 'pictures']
+
     for required in required_args:
         if not required in payload:
-            logger.error('/api/submit required parameter {} missing'.format(required))
+            logger.error(create_msg('required parameter {} missing'.format(required)))
             return jsonify(error='Required parameter "{}" is missing 🙊'
                            .format(required)), 400
 
     for picture in payload.get('pictures'):
         if not picture.get('src'):
-            logger.error('/api/submit picture without src argument')
+            logger.error(create_msg('picture without src argument'))
             return jsonify(error='Invalid picture given. Picture without src argument 🙊'), 400
 
     data = {
@@ -67,9 +68,10 @@ def api_submit():
     }
     resp = requests.post(RECAPTCHA_HOST, data=data)
     captcha_response = resp.json()
+
     if resp.status_code is not 200 or \
             not captcha_response.get('success'):
-        logger.error('Captcha wrong. {}'.format(captcha_response))
+        logger.error(create_msg('Captcha wrong. {}'.format(captcha_response)))
         return jsonify(error='Captcha is wrong 🙊'), 400
 
     response_msg = ''
@@ -79,12 +81,14 @@ def api_submit():
     if len(payload.get('pictures')) > 1 and \
             not is_valid_secret:
         payload['pictures'] = [payload['pictures'][0]]
+
         response_msg = response_msg + ' only first picture is printed out.'
-        logger.info('only first picture is printed out')
+        logger.info(create_msg('only first picture is printed out'))
 
     try:
         process_postcard_request(payload)
     except InvalidPictureException:
+        logger.error(create_msg('uploaded picture is invalid'))
         return jsonify(error='Invalid picture given 🙊'), 400
 
     return jsonify({
@@ -152,7 +156,7 @@ def store_image(encoded_picture, sender_name=''):
     basename = os.path.join(folder_name, basename)
 
     filename = os.path.join(settings.BASEDIR_PICTURES, basename)
-    logger.info('storing picture {}'.format(filename))
+    logger.info(create_msg('storing picture {}'.format(filename)))
 
     image_64_decode = base64.b64decode(src)
     throw_exception_if_invalid_picture(image_64_decode)
@@ -172,6 +176,13 @@ def to_valid_filename(name):
     if len(name) > 50:
         name = name[:50]
     return name
+
+
+def create_msg(msg):
+    url = request.url if request else '-'
+    ip = request.remote_addr if request else '-'
+    id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
+    return "[{}] [{}] [{}]: {}".format(id, ip, url, msg)
 
 
 if __name__ == '__main__':
