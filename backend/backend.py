@@ -66,13 +66,15 @@ def api_submit():
         'secret': settings.CAPTCHA_SECRET,
         'response': payload.get('g-recaptcha-response')
     }
+    print(data)
     resp = requests.post(RECAPTCHA_HOST, data=data)
     captcha_response = resp.json()
 
-    if resp.status_code is not 200 or \
-            not captcha_response.get('success'):
-        logger.error(create_msg('Captcha wrong. {}'.format(captcha_response)))
-        return jsonify(error='Captcha is wrong 🙊'), 400
+    if not settings.IGNORE_CAPTCHA:
+        if resp.status_code is not 200 or \
+                not captcha_response.get('success'):
+            logger.error(create_msg('Captcha wrong. {}'.format(captcha_response)))
+            return jsonify(error='Captcha is wrong 🙊'), 400
 
     response_msg = ''
     secret = payload.get('secret')
@@ -181,7 +183,8 @@ def to_valid_filename(name):
 def create_msg(msg):
     url = request.url if request else '-'
     id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
-    ip = request.environ.get('HTTP_X_FORWARDED_FOR')[:200] if request else '-'
+    ip = request.environ.get('HTTP_X_FORWARDED_FOR') if request else '-'
+    ip = ip[:200] if ip is not None else '-'
 
     return "[{}] [{}] [{}]: {}".format(id, ip, url, msg)
 
