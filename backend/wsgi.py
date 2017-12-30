@@ -1,6 +1,15 @@
 from backend import app
-from backend import RequestFormatter
+from flask import request
 import logging
+
+
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        record.url = request.url if request else '-'
+        record.remote_addr = request.remote_addr if request else '-'
+        record.request_id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
+        return super().format(record)
+
 
 if __name__ == "__main__":
     formatter = RequestFormatter(

@@ -14,9 +14,10 @@ from xml.sax.saxutils import escape
 from flask_request_id import RequestID
 import sys
 
-logger = logging.getLogger('postcard-love')
 VALID_PIC_EXT = ['gif', 'png', 'jpg', 'tiff', 'bmp']
 RECAPTCHA_HOST = 'https://www.google.com/recaptcha/api/siteverify'
+
+logger = logging.getLogger('postcard-love')
 
 app = Flask(__name__, static_url_path='')
 RequestID(app)
@@ -25,13 +26,7 @@ app.debug = settings.REST_DEBUG
 if not os.path.exists(settings.BASEDIR_PICTURES):
     os.makedirs(settings.BASEDIR_PICTURES)
 
-
-class RequestFormatter(logging.Formatter):
-    def format(self, record):
-        record.url = request.url if request else '-'
-        record.remote_addr = request.remote_addr if request else '-'
-        record.request_id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
-        return super().format(record)
+logger.info('postcard-love backend is up and running')
 
 
 class InvalidPictureException(Exception):
