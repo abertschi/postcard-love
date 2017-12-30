@@ -6,6 +6,7 @@ CAPTCHA_SECRET = ''
 MOCK_SEND = False
 DB_DEBUG = False
 REST_DEBUG = False
+IGNORE_CAPTCHA = False
 
 POST_ACCOUNTS = [
     {
