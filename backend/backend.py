@@ -35,12 +35,12 @@ class InvalidPictureException(Exception):
 
 @app.route('/')
 def serve():
-    logger.info(request.headers.__dict__)
     return app.send_static_file('index.html')
 
 
 @app.route('/api/submit', methods=['GET'])
 def meh():
+    logger.info(request.headers.__dict__)
     return random.choice(['ಠ_ಠ', '(ง\'̀-\'́)ง', '◉_◉', '┻━┻ ︵ヽ(`Д´)ﾉ︵ ┻━┻'])
 
 
