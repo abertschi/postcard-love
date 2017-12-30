@@ -183,7 +183,8 @@ def create_msg(msg):
     url = request.url if request else '-'
     id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
     ip = request.remote_addr if request else None
-
+    logger.info('ip: ' + str(ip))
+    logger.info('forwarded: ' + str(request.headers.get('HTTP_X_FORWARDED_FOR')))
     if not ip or ip == b'':
         ip = request.headers.get('HTTP_X_FORWARDED_FOR')[:100] if request else '-'
 
