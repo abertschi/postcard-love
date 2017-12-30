@@ -181,9 +181,7 @@ def to_valid_filename(name):
 def create_msg(msg):
     url = request.url if request else '-'
     id = request.environ.get("FLASK_REQUEST_ID") if request else '-'
-    ip = request.remote_addr if request else None
-    if not ip:
-        ip = request.environ.get('HTTP_X_FORWARDED_FOR')[:200] if request else '-'
+    ip = request.environ.get('HTTP_X_FORWARDED_FOR')[:200] if request else '-'
 
     return "[{}] [{}] [{}]: {}".format(id, ip, url, msg)
 
