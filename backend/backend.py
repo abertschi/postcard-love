@@ -35,6 +35,7 @@ class InvalidPictureException(Exception):
 
 @app.route('/')
 def serve():
+    logger.info(request.headers.__dict__)
     return app.send_static_file('index.html')
 
 
