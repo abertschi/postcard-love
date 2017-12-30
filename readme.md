@@ -30,3 +30,6 @@ Made during Xmas 2017 with 🥛, ☕️ and much ❤️ by Andrin Bertschi
 
 - https://twitter.com/andrinbertschi
 - www.abertschi.ch
+
+"A smile is happiness you'll find right under your nose."
+-- Tom Wilson
