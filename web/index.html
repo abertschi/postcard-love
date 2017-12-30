@@ -80,7 +80,9 @@
                 <span id="0-upload" class="upload__title step__title">
                   <a href="#0-upload" id="upload__title" class="no-hyperlink" tabindex=1>#1 UPLOAD IMAGE</a></span>
               </div>
-              <div class="col s12" >
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1" >
                 <div class="upload__dragdrop" id="droptarget"
                      v-on:dragover="imageDragOverHandler"
                      v-on:drop="imageDropHandler">
@@ -112,7 +114,7 @@
 
                       </div>
                     </div>
-                    <!-- show spinner animation when loading -->
+                    
                     <div class="upload__dragdrop__spinner"
                          v-if="processImage.active">
                       <div class="preloader-wrapper active">
@@ -129,11 +131,11 @@
                     </div>
                   </div>
                 </div>
-                <span class="upload__dragdrop__txt">
-                  <!-- Drag and image here or press to choose from filesystem -->
-                  <!-- Drag image here -->
+                <span class="upload__dragdrop__txt text--normal">
+
                 </span>
                 <input class="upload__input"
+                       style="width: 0%;"
                        type="file" name="pictures" id="pictures"
                        multiple="multiple" accept="image/*"
                        v-on:change="fileSelect"
@@ -142,13 +144,14 @@
             </div>
           </div>          
         </section>
+        
         <section class="choose_text section">
           <div class="container">
             <div class="row">
               <div class="col s12">
                 <span id="0-write" class="choose_text__title step__title">#2 WRITE MESSAGE</span>
               </div>
-              <div class="col offset-s1 s10 m8 offset-m2 choose_text__msg ">
+              <div class="col offset-s2 s8 m8 offset-m2 choose_text__msg ">
                 <br/>
                 <textarea id="textarea1" class="materialize-textarea choose_text__textarea text--normal "
                           placeholder="Enter your message ..."
@@ -202,7 +205,7 @@
                   <!-- data key local -->
                   <!-- data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" -->
                   <div class="g-recaptcha"
-                       data-sitekey="6Lezwz4UAAAAAKeBhDhpNtv_B0EUXjlvEk6hQhoP"
+                       data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4"
                        data-callback="recaptcha_callback" style=""></div>
                 </a>
               </div>
@@ -229,63 +232,69 @@
           </div>
         </section>
         <section class="submission" >
-          <div class="submission__send">
-            <span id="0-send" class="submission__send__button"
-                  v-on:click="send">
-              <a href="#0-send" class="no-hyperlink" tabindex=25>SEND POSTCARD</a>
-            </span>
+          <div class="container">
+            <div class="row">
+              <div class="col s10 offset-s1">
+                <div class="submission__send">
+                  <span id="0-send" class="submission__send__button"
+                        v-on:click="send">
+                    <a href="#0-send" class="no-hyperlink" tabindex=25>SEND POSTCARD</a>
+                  </span>
 
-            <div class="submission__progress"
-                 v-if="submission.active">
-              
-              <div class="preloader-wrapper active">
-                <div class="spinner-layer" style="border-color: black !important;">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
+                  <div class="submission__progress"
+                       v-if="submission.active">
+                    
+                    <div class="preloader-wrapper active">
+                      <div class="spinner-layer" style="border-color: black !important;">
+                        <div class="circle-clipper left">
+                          <div class="circle"></div>
+                        </div><div class="gap-patch">
+                          <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                          <div class="circle"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="submission__quote text--h3"
+                       v-if="!submission.active">
+                    
+                    <div class="submission__validation"
+                         v-if="validation.submit">
+                      <i v-if="validation.submit && !validation.image">
+                        ✖ <a href="#0-upload" tabindex="27">Please upload an image</a><br/></i>
+                      <i v-if="validation.submit && !validation.human">
+                        ✖ <a href="#0-verify" tabindex="28">Please verify your identity</a><br/></i>
+                    </div>
+
+                    <div class="submission__error__container" v-if="submission.showError">
+                      <div class="submission__error text--h3" >
+                        Whoopsie. {{submission.error}}
+                      </div>
+                    </div>
+                    <div class="submission__success__container" v-if="submission.sent">
+                      <div class="submission__success" >
+                        <!-- <div class="submission__success__smiley">:D</div> -->
+                        <div class="submission__success__msg text--h3">
+                          postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span> <br/>
+                          {{submission.successMessage}}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">
+                      <i>"A smile is happiness you'll find right under your nose." <br/>
+                        -- Tom Wilson</i>
+                      <br/>
+                      <br/>
+                      <br/>
+                    </div>
+                    <div class="submission__quote__bean" v-if="!submission.active">
+                      Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch" tabindex="30">abertschi</a></i>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            <div class="submission__quote text--h3"
-                 v-if="!submission.active">
-              
-              <div class="submission__validation"
-                   v-if="validation.submit">
-                <i v-if="validation.submit && !validation.image">
-                  ✖ <a href="#0-upload" tabindex="27">Please upload an image</a><br/></i>
-                <i v-if="validation.submit && !validation.human">
-                  ✖ <a href="#0-verify" tabindex="28">Please verify that you are human </a><br/></i>
-              </div>
-
-              <div class="submission__error__container" v-if="submission.showError">
-                <div class="submission__error text--h3" >
-                  Whoopsie. {{submission.error}}
-                </div>
-              </div>
-              <div class="submission__success__container" v-if="submission.sent">
-                <div class="submission__success" >
-                  <!-- <div class="submission__success__smiley">:D</div> -->
-                  <div class="submission__success__msg text--h3">
-                    postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span> <br/>
-                    {{submission.successMessage}}
-                  </div>
-                </div>
-              </div>
-              
-              <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">
-                <i>"A smile is happiness you'll find right under your nose." <br/>
-                  -- Tom Wilson</i>
-                <br/>
-                <br/>
-                <br/>
-              </div>
-              <div class="submission__quote__bean" v-if="!submission.active">
-                Smile more <br/><i>Made with ❤ by <a href="https://abertschi.ch" tabindex="30">abertschi</a></i>
               </div>
             </div>
           </div>

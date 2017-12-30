@@ -214,6 +214,7 @@ section > div {
     /* height: 100%; */
     /* background-color: green; */
     float: right;
+    display: none;
 }
 
 
@@ -360,7 +361,7 @@ a {
 }
 
 .upload__input {
-    visibility: hidden;
+    /* visibility: hidden; */
 }
 
 .hidden {
@@ -744,6 +745,9 @@ input {
 @media only screen and (min-width: 992px) {
     .header__left {
         width: 50%;
+    }
+    .header__right {
+        display: block;
     }
 }
 
