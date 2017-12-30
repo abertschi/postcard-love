@@ -196,6 +196,11 @@
               <div class="input-field col s12 m6 l6 sender__info_txt sender__info_captcha center-align submit__name--pading text--normal"
                    style="">
                 <a href="" class="no-hyperlink" tabindex=15>
+                  <!-- data key prod -->
+                  <!-- data-sitekey="6Lezwz4UAAAAAKeBhDhpNtv_B0EUXjlvEk6hQhoP" -->
+
+                  <!-- data key local -->
+                  <!-- data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" -->
                   <div class="g-recaptcha"
                        data-sitekey="6Lezwz4UAAAAAKeBhDhpNtv_B0EUXjlvEk6hQhoP"
                        data-callback="recaptcha_callback" style=""></div>
@@ -323,8 +328,12 @@
          watch: {
            love: {
              handler() {
-               localStorage.setItem('love', JSON.stringify(this.love));
                this.validation.image = this.love.pictures.length > 0;
+               try {
+                 localStorage.setItem('love', JSON.stringify(this.love));
+               } catch(err) {
+                 console.log('Pricture is too big, cant be stored in localstore');
+               }
              },
              deep: true,
            },
@@ -399,6 +408,9 @@
            },
            
            handleFiles: function(files) {
+             console.log('handling files: ');
+             console.log(files);
+             
              let first = true;
              let that = this;
              files.forEach(f => {
@@ -480,6 +492,9 @@
            },
            
            resizeImage: function (file, callback) {
+             console.log('resizing Image:');
+             console.log(file);
+             
              const MAX_WIDTH = 1500;
              const MAX_HEIGHT = 1000;
              
