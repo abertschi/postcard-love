@@ -205,8 +205,8 @@
                   <!-- data key local -->
                   <!-- data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4" -->
                   <div class="g-recaptcha"
-                       data-sitekey="6LdoUj0UAAAAACtNTD7bkXAdgh7Uij4Wg0DttSL4"
-                       data-callback="recaptcha_callback" style=""></div>
+                       data-sitekey="6Lezwz4UAAAAAKeBhDhpNtv_B0EUXjlvEk6hQhoP"
+                    data-callback="recaptcha_callback" style=""></div>
                 </a>
               </div>
             </div>
@@ -267,20 +267,14 @@
                       <i v-if="validation.submit && !validation.human">
                         ✖ <a href="#0-verify" tabindex="28">Please verify your identity</a><br/></i>
                     </div>
-
-                    <div class="submission__error__container" v-if="submission.showError">
-                      <div class="submission__error text--h3" >
-                        Whoopsie. {{submission.error}}
-                      </div>
+                    
+                    <div class="submission__error text--h3" v-if="submission.showError">
+                      Whoopsie. {{submission.error}}
                     </div>
-                    <div class="submission__success__container" v-if="submission.sent">
-                      <div class="submission__success" >
-                        <!-- <div class="submission__success__smiley">:D</div> -->
-                        <div class="submission__success__msg text--h3">
-                          postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span> <br/>
-                          {{submission.successMessage}}
-                        </div>
-                      </div>
+                    
+                    <div class="submission__success text--h3" v-if="submission.sent">
+                      postcard sent! &nbsp; <span style="font-size: 40px"> 🎉</span> <br/>
+                      {{submission.successMessage}}
                     </div>
                     
                     <div class="submission__quote__text" v-if="!submission.active && !submission.showError && !submission.sent">

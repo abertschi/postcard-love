@@ -652,12 +652,12 @@ input {
 }
 
 .submission__success {
-    width: 400px;
-
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
+    /* width: 400px; */
+    /* display: block; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* text-align: left; */
+    margin-bottom: 50px;
     
 }
 .submission__success__container {
@@ -684,12 +684,13 @@ input {
 }
 
 .submission__error {
-    width: 400px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    margin-bottom: 100px;
+    /* width: 400px; */
+    /* display: block; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    /* text-align: center; */
+    /* margin-bottom: 100px; */
+    margin-bottom: 50px;
     
 }
 .submission__error__container {
