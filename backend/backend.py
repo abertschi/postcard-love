@@ -66,7 +66,7 @@ def api_submit():
         'secret': settings.CAPTCHA_SECRET,
         'response': payload.get('g-recaptcha-response')
     }
-    print(data)
+
     resp = requests.post(RECAPTCHA_HOST, data=data)
     captcha_response = resp.json()
 
