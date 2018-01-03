@@ -115,7 +115,7 @@ def process_postcard_request(payload):
     identifier = 'p-' + datetime.datetime.now().strftime("%f")
 
     for picture in payload.get('pictures'):
-        name = identifier + '_' + picture.get('name')
+        name = identifier + '_' + (picture.get('name') or '')
         picture_paths.append(store_image(picture.get('src'), name))
 
     if not picture_paths:
@@ -194,4 +194,4 @@ if __name__ == '__main__':
                         stream=sys.stdout,
                         format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
                         datefmt="%Y-%m-%d %H:%M:%S")
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5002)
