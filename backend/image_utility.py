@@ -30,7 +30,7 @@ def can_printout_card(dbcard):
                      .format(abs_path, dbcard.id))
         return True
 
-    return check_for_nsfw(dbcard.id, dbcard.picture_path)
+    return check_for_nsfw(dbcard.id, os.path.join(BASEDIR_PICTURES, dbcard.picture_path))
 
 
 def check_for_nsfw(card_id, abs_path):
@@ -50,11 +50,11 @@ def check_for_nsfw(card_id, abs_path):
 
     score = nudity.get('raw') or 1
     if score >= NSFW_SCORE_THRESHOLD:
-        logger.info('picture {} / {} was flagged as NSFW. Raw score: {}'
+        logger.info('picture {}, {} was flagged as NSFW. Raw score: {}'
                     .format(card_id, abs_path, score))
         return False
 
-    logger.info('picture {} / {} does not contain NSFW content. Score {}'
+    logger.info('picture {}, {} does not contain NSFW content. Score {}'
                 .format(card_id, abs_path, score))
     return True
 

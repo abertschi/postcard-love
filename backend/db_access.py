@@ -47,6 +47,11 @@ class DbPostcard(db.Entity):
     sender_name = Optional(str)
     picture_path = Required(str)
 
+    # is_cancelled = Required(bool, default=False)
+    # misc1 = Optional(str)
+    # client_info = Optional(str)
+    # todo do data migration on production db and add this flag
+
     priority = Optional(int)
     secret = Optional(str)
     create_date = Required(datetime.datetime, default=datetime.datetime.now())
@@ -169,12 +174,14 @@ def move_picture(db_postcard, relative_target):
 
 @db_session
 def move_picture_to_cancel_folder(db_postcard):
+    # TODO set clancel flag
     move_picture(db_postcard, '_cancel')
     pass
 
 
 @db_session
 def move_picture_to_sent_folder(db_postcard):
+    # TODO set sent flag here? already set somewhere else
     move_picture(db_postcard, '_sent')
 
 
@@ -211,6 +218,7 @@ def print_sent_postcards():
 def clean_up_postcards():
     cards = select(p for p in DbPostcard)[:]
     for c in cards:
+        move_picture_to_sent_folder(c)
         if DEV_IGNORE_SECRET:
             if c.secret is DEV_IGNORE_SECRET:
                 move_picture_to_cancel_folder(c)
