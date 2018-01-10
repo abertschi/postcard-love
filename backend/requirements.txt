@@ -18,5 +18,6 @@ postcard-creator==0.0.7
 python-resize-image==1.1.11
 requests==2.18.4
 requests-toolbelt==0.8.0
+sightengine==1.3.0
 urllib3==1.22
 Werkzeug==0.13
