@@ -1,5 +1,5 @@
 from db_access import get_pending_postcards, DbPostcard, DbRecipient, \
-    mark_postcard_as_sent, get_size_of_pending_postcards
+    mark_postcard_as_sent, get_size_of_pending_postcards, move_picture_to_cancel_folder
 import logging
 import settings
 import random
@@ -15,6 +15,7 @@ import unicodedata
 logger = logging.getLogger('send_job')
 
 import codecs
+import image_utility
 from html.entities import codepoint2name
 
 
@@ -84,6 +85,11 @@ def send_cards(api_wrappers, db_cards):
 
         pending_card = db_cards[card_i]
         card_i = card_i + 1
+
+        if not image_utility.can_printout_card(pending_card):
+            # todo refactor this method to accept one card and one wrapper
+            move_picture_to_cancel_folder(pending_card)
+            continue
 
         file = os.path.join(settings.BASEDIR_PICTURES, pending_card.picture_path)
         api_picture_stream = open(file, 'rb')

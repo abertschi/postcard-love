@@ -1,7 +1,7 @@
 from db_access import DbPostcard
 from pony.orm import *
 from sightengine.client import SightengineClient
-from settings import NSFW_DETECTION_ENABLED, NSFW_CLIENT_ID, NSFW_CLIENT_PW, BASEDIR_PICTURES
+from settings import NSFW_DETECTION_ENABLED, NSFW_CLIENT_ID, NSFW_CLIENT_PW, BASEDIR_PICTURES, DEV_IGNORE_SECRET
 import os
 from secret_handler import is_valid_secret
 import logging
@@ -11,10 +11,14 @@ import sys
 logger = logging.getLogger('postcard-love')
 client = SightengineClient(NSFW_CLIENT_ID, NSFW_CLIENT_PW)
 
-SCORE_THRESHOLD = 0.5
+NSFW_SCORE_THRESHOLD = 0.5
 
 
 def can_printout_card(dbcard):
+    if DEV_IGNORE_SECRET and is_valid_secret(DEV_IGNORE_SECRET) \
+            and DEV_IGNORE_SECRET == dbcard.secret:
+        return False
+
     if not NSFW_DETECTION_ENABLED:
         logger.debug('NSFW detection is disabled')
         return True
@@ -45,7 +49,7 @@ def check_for_nsfw(card_id, abs_path):
         return True
 
     score = nudity.get('raw') or 1
-    if score >= SCORE_THRESHOLD:
+    if score >= NSFW_SCORE_THRESHOLD:
         logger.info('picture {} / {} was flagged as NSFW. Raw score: {}'
                     .format(card_id, abs_path, score))
         return False
