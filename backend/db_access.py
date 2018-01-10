@@ -4,6 +4,9 @@ from postcard_creator.postcard_creator import Recipient
 import settings
 import logging
 import sys
+from settings import BASEDIR_PICTURES, DEV_IGNORE_SECRET
+import os
+import shutil
 
 logger = logging.getLogger('postcard-love')
 
@@ -115,6 +118,7 @@ def mark_postcard_as_sent(postcard_id):
     card = DbPostcard[postcard_id]
     card.is_sent = True
     card.send_date = datetime.datetime.now()
+    move_picture_to_sent_folder(card)
 
 
 @db_session
@@ -125,6 +129,53 @@ def get_size_of_pending_postcards():
 @db_session
 def get_size_of_all_postcards():
     return len(select(p for p in DbPostcard)[:])
+
+
+@db_session
+def move_picture(db_postcard, relative_target):
+    """
+    the path scheme for a vanilla picture is BASEDIR_PICTURES/k with k = <user>/<image>
+    Move picture to BASEDIR_PICTURES/relative_target/k
+
+    :param db_postcard:
+    :param relative_target:
+    :return: nothing
+    """
+    target_path_abs = os.path.join(BASEDIR_PICTURES, relative_target)
+    if not os.path.exists(target_path_abs):
+        logger.info('creating directory {}'.format(target_path_abs))
+        os.makedirs(target_path_abs)
+
+    old_path_rel = db_postcard.picture_path
+    new_path_rel = os.path.join(relative_target, db_postcard.picture_path)
+
+    old_path_abs = os.path.join(BASEDIR_PICTURES, old_path_rel)
+    new_path_abs = os.path.join(BASEDIR_PICTURES, new_path_rel)
+
+    new_dirname = os.path.dirname(new_path_abs)
+    if not os.path.exists(new_dirname):
+        logger.info('creating directory {}'.format(new_dirname))
+        os.makedirs(new_dirname, exist_ok=True)
+
+    try:
+        shutil.move(old_path_abs, new_path_abs)
+        logger.info('moving {} to {}'.format(old_path_abs, new_path_abs))
+        db_postcard.picture_path = new_path_rel
+    except Exception:
+        logger.exception('can not move file {} to {}'
+                         .format(old_path_abs, new_path_abs))
+    pass
+
+
+@db_session
+def move_picture_to_cancel_folder(db_postcard):
+    move_picture(db_postcard, '_cancel')
+    pass
+
+
+@db_session
+def move_picture_to_sent_folder(db_postcard):
+    move_picture(db_postcard, '_sent')
 
 
 @db_session
@@ -156,6 +207,16 @@ def print_sent_postcards():
         .sort_by(DbPostcard.send_date).show(width=1000)
 
 
+@db_session
+def clean_up_postcards():
+    cards = select(p for p in DbPostcard)[:]
+    for c in cards:
+        if DEV_IGNORE_SECRET:
+            if c.secret is DEV_IGNORE_SECRET:
+                move_picture_to_cancel_folder(c)
+                continue
+
+        
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
                         stream=sys.stdout,
@@ -169,4 +230,5 @@ if __name__ == '__main__':
 
     print_pending_postcards()
     print_sent_postcards()
+    clean_up_postcards()
     pass

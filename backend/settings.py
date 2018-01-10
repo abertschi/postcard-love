@@ -26,6 +26,8 @@ BASEDIR_PICTURES = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'im
 # }
 SECRETS_MAP = defaultdict(set)
 
+DEV_IGNORE_SECRET = None
+
 try:
     from secrets.settings_local import *
 except ImportError:
