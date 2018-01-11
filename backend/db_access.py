@@ -4,6 +4,9 @@ from postcard_creator.postcard_creator import Recipient
 import settings
 import logging
 import sys
+from settings import BASEDIR_PICTURES, DEV_IGNORE_SECRET
+import os
+import shutil
 
 logger = logging.getLogger('postcard-love')
 
@@ -49,8 +52,16 @@ class DbPostcard(db.Entity):
     create_date = Required(datetime.datetime, default=datetime.datetime.now())
     send_date = Optional(datetime.datetime)
     is_sent = Required(bool, default=False)
+
+    is_cancelled = Required(bool, default=False)
+    cancel_date = Optional(datetime.datetime)
+
     recipient = Required(DbRecipient)
     picture_group = Optional(DbPostcardGroup)
+
+    misc1 = Optional(str)
+    misc2 = Optional(str)
+    client_info = Optional(str)
 
 
 db.generate_mapping(create_tables=True)
@@ -99,7 +110,7 @@ def store_postcard(postcard_request, recipient):
 
 @db_session
 def get_pending_postcards(limit=10):
-    cards = select(c for c in DbPostcard if c.is_sent is False) \
+    cards = select(c for c in DbPostcard if c.is_sent is False and c.is_cancelled is False) \
                 .sort_by(desc(DbPostcard.priority))[:limit]
 
     for c in cards:
@@ -115,16 +126,67 @@ def mark_postcard_as_sent(postcard_id):
     card = DbPostcard[postcard_id]
     card.is_sent = True
     card.send_date = datetime.datetime.now()
+    _move_picture_to_sent_folder(card.id)
+
+
+@db_session
+def mark_postcard_as_cancelled(postcard_id):
+    card = DbPostcard[postcard_id]
+    card.is_cancelled = True
+    card.cancel_date = datetime.datetime.now()
+    _move_picture_to_cancel_folder(card.id)
 
 
 @db_session
 def get_size_of_pending_postcards():
-    return len(select(p for p in DbPostcard if p.is_sent is False)[:])
+    return len(select(p for p in DbPostcard if p.is_sent is False and p.is_cancelled is False)[:])
 
 
 @db_session
 def get_size_of_all_postcards():
     return len(select(p for p in DbPostcard)[:])
+
+
+@db_session
+def _move_picture(postcard_id, relative_target):
+    """
+    the path scheme for a vanilla picture is BASEDIR_PICTURES/k with k = <user>/<image>
+    Move picture to BASEDIR_PICTURES/relative_target/k
+    """
+    card = DbPostcard[postcard_id]
+
+    target_path_abs = os.path.join(BASEDIR_PICTURES, relative_target)
+    if not os.path.exists(target_path_abs):
+        logger.info('creating directory {}'.format(target_path_abs))
+        os.makedirs(target_path_abs)
+
+    old_path_rel = card.picture_path
+    new_path_rel = os.path.join(relative_target, card.picture_path)
+
+    old_path_abs = os.path.join(BASEDIR_PICTURES, old_path_rel)
+    new_path_abs = os.path.join(BASEDIR_PICTURES, new_path_rel)
+
+    new_dirname = os.path.dirname(new_path_abs)
+    if not os.path.exists(new_dirname):
+        logger.info('creating directory {}'.format(new_dirname))
+        os.makedirs(new_dirname, exist_ok=True)
+
+    try:
+        shutil.move(old_path_abs, new_path_abs)
+        logger.info('moving {} to {}'.format(old_path_abs, new_path_abs))
+        card.picture_path = new_path_rel
+    except Exception:
+        logger.exception('can not move file {} to {}'
+                         .format(old_path_abs, new_path_abs))
+    pass
+
+
+def _move_picture_to_cancel_folder(postcard_id):
+    _move_picture(postcard_id, '_cancel')
+
+
+def _move_picture_to_sent_folder(postcard_id):
+    _move_picture(postcard_id, '_sent')
 
 
 @db_session
@@ -143,6 +205,7 @@ def print_pending_postcards():
     DbRecipient.select().show(width=1000)
     DbPostcardGroup.select().show(width=1000)
     select(p for p in DbPostcard if p.is_sent is False).show(width=1000)
+    print('\n\n')
 
 
 @db_session
@@ -154,6 +217,29 @@ def print_sent_postcards():
     DbPostcardGroup.select().show(width=1000)
     select(p for p in DbPostcard if p.is_sent is True) \
         .sort_by(DbPostcard.send_date).show(width=1000)
+    print('\n\n')
+
+
+@db_session
+def print_cancelled_postcards():
+    print('='[:1] * 50)
+    print('showing cancellled postcards')
+    print('='[:1] * 50)
+    DbRecipient.select().show(width=1000)
+    DbPostcardGroup.select().show(width=1000)
+    select(p for p in DbPostcard if p.is_cancelled is True) \
+        .sort_by(DbPostcard.send_date).show(width=1000)
+    print('\n\n')
+
+
+@db_session
+def clean_up_postcards():
+    cards = select(p for p in DbPostcard)[:]
+    for c in cards:
+        if DEV_IGNORE_SECRET:
+            if c.secret is DEV_IGNORE_SECRET:
+                mark_postcard_as_cancelled(c.id)
+                continue
 
 
 if __name__ == '__main__':
@@ -169,4 +255,5 @@ if __name__ == '__main__':
 
     print_pending_postcards()
     print_sent_postcards()
+    print_cancelled_postcards()
     pass
