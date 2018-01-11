@@ -77,6 +77,7 @@ def send_cards(api_wrappers, db_cards):
         card_i = card_i + 1
 
         if not image_utility.can_printout_card(pending_card):
+            # Todo, reuse wrapper if card was cancelled
             logger.info('card {} was flagged as cancelled.'.format(pending_card.id))
             mark_postcard_as_cancelled(pending_card.id)
             continue
