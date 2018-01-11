@@ -26,6 +26,13 @@ BASEDIR_PICTURES = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'im
 # }
 SECRETS_MAP = defaultdict(set)
 
+DEV_IGNORE_SECRET = None
+
+
+NSFW_DETECTION_ENABLED = False
+NSFW_CLIENT_ID = ''
+NSFW_CLIENT_PW = ''
+
 try:
     from secrets.settings_local import *
 except ImportError:
