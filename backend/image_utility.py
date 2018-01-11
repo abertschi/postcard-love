@@ -48,9 +48,9 @@ def check_for_nsfw(card_id, abs_path):
                      .format(json.dumps(output)))
         return True
 
-    score = nudity.get('raw') or 1
+    score = nudity.get('raw') or 0
     if score >= NSFW_SCORE_THRESHOLD:
-        logger.info('picture {}, {} was flagged as NSFW. Raw score: {}'
+        logger.warn('picture {}, {} was flagged as NSFW. Raw score: {}'
                     .format(card_id, abs_path, score))
         return False
 

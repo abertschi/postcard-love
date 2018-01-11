@@ -1,25 +1,22 @@
-from db_access import get_pending_postcards, DbPostcard, DbRecipient, \
-    mark_postcard_as_sent, get_size_of_pending_postcards, move_picture_to_cancel_folder
+from db_access import get_pending_postcards, \
+    mark_postcard_as_sent, get_size_of_pending_postcards, mark_postcard_as_cancelled
 import logging
 import settings
 import random
 import sys
 import os
-from postcard_creator.postcard_creator import Token, PostcardCreator, Postcard, Recipient, Sender, \
-    PostcardCreatorException
+from postcard_creator.postcard_creator import Token, PostcardCreator, Postcard, Recipient, Sender
 from xml.sax.saxutils import escape
-import json
 import emoji
 import unicodedata
-
-logger = logging.getLogger('send_job')
-
 import codecs
 import image_utility
 from html.entities import codepoint2name
 
+logger = logging.getLogger('send_job')
 
-def html_replace(exc):
+
+def _html_replace(exc):
     if isinstance(exc, (UnicodeEncodeError, UnicodeTranslateError)):
         s = [u'&%s;' % codepoint2name[ord(c)]
              for c in exc.object[exc.start:exc.end]]
@@ -28,7 +25,7 @@ def html_replace(exc):
         raise TypeError("can't handle {}".format(exc.__name__))
 
 
-codecs.register_error('html_replace', html_replace)
+codecs.register_error('html_replace', _html_replace)
 
 
 def process():
@@ -40,6 +37,7 @@ def process():
 
     random.shuffle(api_wrappers)
     pending_cards = get_pending_postcards(limit=len(api_wrappers))
+
     sent_cards = send_cards(api_wrappers, pending_cards)
     logger.info('{}/{} postcards ({}) are sent'.format(len(sent_cards), get_size_of_pending_postcards(), sent_cards))
 
@@ -67,14 +65,6 @@ def create_api_sender(db_postcard):
                   place=db_postcard.recipient.city)
 
 
-def _escape(string):
-    return escape(emoji.demojize(string))
-
-
-def _remove_special_characters(string):
-    return unicodedata.normalize('NFKD', string).encode('iso_8859_1', 'ignore').decode('utf-8')
-
-
 def send_cards(api_wrappers, db_cards):
     card_i = 0
     sent_cards = []
@@ -87,43 +77,47 @@ def send_cards(api_wrappers, db_cards):
         card_i = card_i + 1
 
         if not image_utility.can_printout_card(pending_card):
-            # todo refactor this method to accept one card and one wrapper
-            move_picture_to_cancel_folder(pending_card)
+            logger.info('card {} was flagged as cancelled.'.format(pending_card.id))
+            mark_postcard_as_cancelled(pending_card.id)
             continue
 
-        file = os.path.join(settings.BASEDIR_PICTURES, pending_card.picture_path)
-        api_picture_stream = open(file, 'rb')
-        api_message = escape(pending_card.message)[:400]
-
-        logger.debug('uploading file {}'.format(file))
-        logger.debug('message: ' + api_message)
-
-        api_card = Postcard(sender=create_api_sender(pending_card),
-                            recipient=create_api_recipient(pending_card),
-                            picture_stream=api_picture_stream,
-                            message=api_message)
-        try:
-            response = api_wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
-        except Exception:
-            # weird behaviour noticed with unicode characters
-            # hack for now, if something breaks, retry again but ignore all non ascii characters
-            logger.error('something went wrong with postcard-creator. Perhaps special chars in msg. Retrying once')
-            logger.error('msg = {}, name={}'.format(api_card.message,
-                                                    api_card.sender.prename
-                                                    + api_card.sender.lastname))
-
-            api_card.message = _remove_special_characters(api_card.message)
-            api_card.sender.prename = _remove_special_characters(api_card.sender.prename)
-            api_card.sender.lastname = _remove_special_characters(api_card.sender.lastname)
-
-            response = api_wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
-
+        response = send_card_with_wrapper(api_wrapper, pending_card)
         if response:
             logger.debug('postcard id:{} is sent'.format(pending_card.id))
             mark_postcard_as_sent(postcard_id=pending_card.id)
             sent_cards.append(pending_card.id)
 
     return sent_cards
+
+
+def send_card_with_wrapper(wrapper, card):
+    file = os.path.join(settings.BASEDIR_PICTURES, card.picture_path)
+    api_picture_stream = open(file, 'rb')
+    api_message = escape(card.message)[:400]
+
+    logger.debug('uploading file {}'.format(file))
+    logger.debug('message: ' + api_message)
+
+    api_card = Postcard(sender=create_api_sender(card),
+                        recipient=create_api_recipient(card),
+                        picture_stream=api_picture_stream,
+                        message=api_message)
+    try:
+        response = wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
+    except Exception:
+        # weird behaviour noticed with unicode characters
+        # hack for now, if something breaks, retry again but ignore all non ascii characters
+        logger.error('something went wrong with postcard-creator. Perhaps special chars in msg. Retrying once')
+        logger.error('msg = {}, name={}'.format(api_card.message,
+                                                api_card.sender.prename
+                                                + api_card.sender.lastname))
+
+        api_card.message = _remove_special_characters(api_card.message)
+        api_card.sender.prename = _remove_special_characters(api_card.sender.prename)
+        api_card.sender.lastname = _remove_special_characters(api_card.sender.lastname)
+        response = wrapper.send_free_card(postcard=api_card, mock_send=settings.MOCK_SEND)
+
+    return False if settings.MOCK_SEND else response
 
 
 def _get_pcc_wrapper(stop_on_first_valid=True):
@@ -150,6 +144,14 @@ def _get_pcc_wrapper(stop_on_first_valid=True):
                            'for {}'.format(account.get("username")))
 
     return pcc_wrappers, try_again_after
+
+
+def _escape(string):
+    return escape(emoji.demojize(string))
+
+
+def _remove_special_characters(string):
+    return unicodedata.normalize('NFKD', string).encode('iso_8859_1', 'ignore').decode('utf-8')
 
 
 if __name__ == '__main__':
