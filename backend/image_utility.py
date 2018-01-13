@@ -54,7 +54,7 @@ def check_for_nsfw(card_id, abs_path):
                     .format(card_id, abs_path, score))
         return False
 
-    logger.info('picture {}, {} does not contain NSFW content. Score {}'
+    logger.debug('picture {}, {} does not contain NSFW content. Score {}'
                 .format(card_id, abs_path, score))
     return True
 
