@@ -173,7 +173,7 @@ def _move_picture(postcard_id, relative_target):
 
     try:
         shutil.move(old_path_abs, new_path_abs)
-        logger.info('moving {} to {}'.format(old_path_abs, new_path_abs))
+        logger.debug('moving {} to {}'.format(old_path_abs, new_path_abs))
         card.picture_path = new_path_rel
     except Exception:
         logger.exception('can not move file {} to {}'

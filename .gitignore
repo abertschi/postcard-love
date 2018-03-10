@@ -18,3 +18,4 @@ venv
 __pycache__
 backend/scripts/prod-*
 log.log
+.idea
