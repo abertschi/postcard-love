@@ -293,275 +293,295 @@
             </div>
           </div>
         </section>
+        <section class="upload section howworks">
+          <div class="container">
+            <div class="row" >
+              <div class="col s12">
+                <span id="0-upload" class="upload__title step__title">
+                  <a href="#0-upload" id="upload__title" class="no-hyperlink" tabindex=1>// HOW DOES THIS WORK?</a></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col m6 offset-m3 s12" >
+                <div class="howworks__text text--h3">
+                  The Swiss Postal Service offers a free service to send postcards within Switzerland in their Android/iOS apps.
+                  This website uses reverse engineered APIs to send free postcards. <br/> <br/>
+                  Want to receive free stuff too? Check out the source code: <br/>
+                  <a href="https://github.com/abertschi/postcard-love">postcard-love</a>,  
+                  <a href="https://github.com/abertschi/postcard_creator_wrapper">postcard_creator_wrapper</a> <br/>
+                </div>
+              </div>
+            </div>          
+        </section>
       </form>
-    </div>    
-    <script>
-     var vue;
-     function recaptcha_callback(){
-       vue.validation.human = true;
-     }
-     (function(){
-       vue = new Vue({
-         el: '#postcard-love',
-         data: {
-           love: {
-             pictures: [],
-             name: '',
-             secret: '',
-             message: ''
-           },
-           imageWorker: null,
-           processImage: {
-             active: false
-           },
-           // false is not valid
-           validation: {
-             submit: false,
-             human: false,
-             image: false
-           },
-           submission: {
-             active: false,
-             error: '',
-             successMessage: '',
-             showError: false,
-             sent: false
+          </div>    
+          <script>
+           var vue;
+           function recaptcha_callback(){
+             vue.validation.human = true;
            }
-         },
-         watch: {
-           love: {
-             handler() {
-               this.validation.image = this.love.pictures.length > 0;
-               try {
-                 localStorage.setItem('love', JSON.stringify(this.love));
-               } catch(err) {
-                 console.log('Pricture is too big, cant be stored in localstore');
-               }
-             },
-             deep: true,
-           },
-         },
-         
-         mounted() {
-           if (localStorage.getItem('love')) { 
-             this.love = JSON.parse(localStorage.getItem('love')) || [];
-           }
-           this.validation.image = this.love.pictures.length > 0;
-         },
-         
-         methods: {           
-           scrollToImageUpload: function() {
-             $('html,body').animate({
-               scrollTop: $("#0-upload").offset().top}, 'slow');
-           },
-
-           resetUserInput: function() {
-             this.love.pictures = [];
-             this.love.message = '';
-             this.validation.human = false;
-             this.validation.image = false;
-             grecaptcha.reset();
-             $('#recaptcha_reload').click();
-           },
-
-           imageDragOverHandler: function(event) {
-             event.stopPropagation();
-             event.preventDefault();
-             event.dataTransfer.dropEffect = 'copy';
-           },
-           
-           imageDropHandler: function(ev) {
-             ev.preventDefault();
-             let files = [];
-             var dt = ev.dataTransfer;
-             if (dt.items) {
-               for (var i=0; i < dt.items.length; i++) {
-                 if (dt.items[i].kind == "file") {
-                   let f = dt.items[i].getAsFile();
-                   files.push(f);
+           (function(){
+             vue = new Vue({
+               el: '#postcard-love',
+               data: {
+                 love: {
+                   pictures: [],
+                   name: '',
+                   secret: '',
+                   message: ''
+                 },
+                 imageWorker: null,
+                 processImage: {
+                   active: false
+                 },
+                 // false is not valid
+                 validation: {
+                   submit: false,
+                   human: false,
+                   image: false
+                 },
+                 submission: {
+                   active: false,
+                   error: '',
+                   successMessage: '',
+                   showError: false,
+                   sent: false
                  }
-               }
-             } else {
-               for (var i=0; i < dt.files.length; i++) {
-                 files.push(dt.files[i]);
-               }  
-             }
-             this.handleFiles(files);
-           },
-           
-           fileSelect: function(event) {
-             event.stopPropagation();
-             event.preventDefault();
-             let files = event.target.files;
-             let images = [];
-             if (files) {
-               files = Array.from(files)
-               files.forEach(f => {
-                 if (f) {
-                   images.push(f);
+               },
+               watch: {
+                 love: {
+                   handler() {
+                     this.validation.image = this.love.pictures.length > 0;
+                     try {
+                       localStorage.setItem('love', JSON.stringify(this.love));
+                     } catch(err) {
+                       console.log('Pricture is too big, cant be stored in localstore');
+                     }
+                   },
+                   deep: true,
+                 },
+               },
+               
+               mounted() {
+                 if (localStorage.getItem('love')) { 
+                   this.love = JSON.parse(localStorage.getItem('love')) || [];
                  }
-               });
-               this.handleFiles(files);
-             }
-           },
+                 this.validation.image = this.love.pictures.length > 0;
+               },
+               
+               methods: {           
+                 scrollToImageUpload: function() {
+                   $('html,body').animate({
+                     scrollTop: $("#0-upload").offset().top}, 'slow');
+                 },
 
-           removeImage: function(index) {
-             console.log('removing index: ' + index);
-             this.love.pictures.splice(index, 1);
-           },
-           
-           handleFiles: function(files) {
-             console.log('handling files: ');
-             console.log(files);
-             
-             let first = true;
-             let that = this;
-             files.forEach(f => {
-               if (f.type.startsWith('image/')) {
+                 resetUserInput: function() {
+                   this.love.pictures = [];
+                   this.love.message = '';
+                   this.validation.human = false;
+                   this.validation.image = false;
+                   grecaptcha.reset();
+                   $('#recaptcha_reload').click();
+                 },
 
-                 if (first) {
-                   // show loading animation
-                   first = false;
-                   that.processImage.active = true;
-                 }
+                 imageDragOverHandler: function(event) {
+                   event.stopPropagation();
+                   event.preventDefault();
+                   event.dataTransfer.dropEffect = 'copy';
+                 },
+                 
+                 imageDropHandler: function(ev) {
+                   ev.preventDefault();
+                   let files = [];
+                   var dt = ev.dataTransfer;
+                   if (dt.items) {
+                     for (var i=0; i < dt.items.length; i++) {
+                       if (dt.items[i].kind == "file") {
+                         let f = dt.items[i].getAsFile();
+                         files.push(f);
+                       }
+                     }
+                   } else {
+                     for (var i=0; i < dt.files.length; i++) {
+                       files.push(dt.files[i]);
+                     }  
+                   }
+                   this.handleFiles(files);
+                 },
+                 
+                 fileSelect: function(event) {
+                   event.stopPropagation();
+                   event.preventDefault();
+                   let files = event.target.files;
+                   let images = [];
+                   if (files) {
+                     files = Array.from(files)
+                     files.forEach(f => {
+                       if (f) {
+                         images.push(f);
+                       }
+                     });
+                     this.handleFiles(files);
+                   }
+                 },
 
-                 this.resizeImage(f, (encoded) => {
-                   console.log(that.processImage.active);
-                   that.love.pictures.push({
-                     name: f.name,
-                     src: encoded
+                 removeImage: function(index) {
+                   console.log('removing index: ' + index);
+                   this.love.pictures.splice(index, 1);
+                 },
+                 
+                 handleFiles: function(files) {
+                   console.log('handling files: ');
+                   console.log(files);
+                   
+                   let first = true;
+                   let that = this;
+                   files.forEach(f => {
+                     if (f.type.startsWith('image/')) {
+
+                       if (first) {
+                         // show loading animation
+                         first = false;
+                         that.processImage.active = true;
+                       }
+
+                       this.resizeImage(f, (encoded) => {
+                         console.log(that.processImage.active);
+                         that.love.pictures.push({
+                           name: f.name,
+                           src: encoded
+                         });
+                         that.processImage.active = false;
+
+                       })
+                     }
                    });
-                   that.processImage.active = false;
+                 },
+                 
+                 send: function() {
+                   this.validation.submit = true;
+                   this.submission.sent = false;
+                   this.submission.showError = false;
+                   if (this.validation.human && this.validation.image) {
+                     this.submission.active = true;
+                     this.validation.submit = false;
+                     
+                     let form = document.getElementById("form");
+                     var data = new FormData(form);
+                     
+                     let payload = {
+                       message: this.love.message,
+                       name: this.love.name,
+                       secret: this.love.secret,
+                       pictures: this.love.pictures,
+                       'g-recaptcha-response': grecaptcha.getResponse()
+                     };
 
-                 })
+                     let that = this;
+                     let url = '/api/submit';
+                     $.ajax({
+                       url: url,
+                       data: JSON.stringify(payload),
+                       dataType: "json",
+                       cache: false,
+                       contentType: "application/json; charset=utf-8",
+                       type: 'POST',
+                       success: function(data){
+                         that.submission.active = false;
+                         that.submission.sent = true;
+                         that.resetUserInput();
+                         console.log(data);
+                         if (data.message) {
+                           that.submission.successMessage = data.message;
+                         }
+                         console.log(data);  
+                       },
+                       error: function(err) {
+                         console.log(err);
+                         that.submission.active = false;
+                         that.submission.showError = true;
+                         msg = err.responseText;
+                         if (err.responseJSON) {
+                           let error = err.responseJSON;
+                           if (error.error) {
+                             msg = error.error;
+                           }
+                         }
+                         msg += ' (' + err.status + ')';
+                         that.submission.error = msg;
+                       },
+                     });
+                   }
+                 },
+                 
+                 resizeImage: function (file, callback) {
+                   console.log('resizing Image:');
+                   console.log(file);
+                   
+                   const MAX_WIDTH = 1500;
+                   const MAX_HEIGHT = 1000;
+                   
+                   var reader = new FileReader();
+                   reader.onloadend = function() {
+                     var tempImg = new Image();
+                     tempImg.src = reader.result;
+                     tempImg.onload = function() {                 
+                       var tempW = tempImg.width;
+                       var tempH = tempImg.height;
+                       
+                       if (tempW > tempH) {
+                         if (tempW > MAX_WIDTH) {
+                           tempH *= MAX_WIDTH / tempW;
+                           tempW = MAX_WIDTH;
+                         }
+                       } else {
+                         if (tempH > MAX_HEIGHT) {
+                           tempW *= MAX_HEIGHT / tempH;
+                           tempH = MAX_HEIGHT;
+                         }
+                       }
+                       
+                       var canvas = document.createElement('canvas');
+                       canvas.width = tempW;
+                       canvas.height = tempH;
+
+                       var ctx = canvas.getContext("2d");
+                       ctx.drawImage(this, 0, 0, tempW, tempH);
+                       
+                       function drawRotated(ctx, degrees){
+                         ctx.clearRect(0,0,canvas.width,canvas.height);
+                         ctx.save();
+                         ctx.translate(canvas.width/2,canvas.height/2);
+                         ctx.rotate(degrees*Math.PI/180);
+                         ctx.drawImage(image,-image.width/2,-image.width/2);
+                         ctx.restore();
+                       }
+
+                       var dataURL = canvas.toDataURL("image/png");
+                       callback(dataURL);
+                     }    
+                   }
+                   reader.readAsDataURL(file);
+                 }
                }
              });
-           },
-           
-           send: function() {
-             this.validation.submit = true;
-             this.submission.sent = false;
-             this.submission.showError = false;
-             if (this.validation.human && this.validation.image) {
-               this.submission.active = true;
-               this.validation.submit = false;
-               
-               let form = document.getElementById("form");
-               var data = new FormData(form);
-               
-               let payload = {
-                 message: this.love.message,
-                 name: this.love.name,
-                 secret: this.love.secret,
-                 pictures: this.love.pictures,
-                 'g-recaptcha-response': grecaptcha.getResponse()
-               };
-
-               let that = this;
-               let url = '/api/submit';
-               $.ajax({
-                 url: url,
-                 data: JSON.stringify(payload),
-                 dataType: "json",
-                 cache: false,
-                 contentType: "application/json; charset=utf-8",
-                 type: 'POST',
-                 success: function(data){
-                   that.submission.active = false;
-                   that.submission.sent = true;
-                   that.resetUserInput();
-                   console.log(data);
-                   if (data.message) {
-                     that.submission.successMessage = data.message;
-                   }
-                   console.log(data);  
-                 },
-                 error: function(err) {
-                   console.log(err);
-                   that.submission.active = false;
-                   that.submission.showError = true;
-                   msg = err.responseText;
-                   if (err.responseJSON) {
-                     let error = err.responseJSON;
-                     if (error.error) {
-                       msg = error.error;
-                     }
-                   }
-                   msg += ' (' + err.status + ')';
-                   that.submission.error = msg;
-                 },
+             
+             $('#droptarget, #upload__title').click(function() {
+               $('#pictures').click();
+             });
+             
+             $(function() {
+               $('textarea[maxlength]').each(function() {
+                 var $textarea = $(this);
+                 var maxlength = $textarea.attr('maxlength');
+                 var val = $textarea.val();
+                 $textarea.val(val.slice(0, maxlength));
+                 $textarea.bind('keyup', function() {
+                   $textarea.val($textarea.val().slice(0, maxlength));
+                 });
                });
-             }
-           },
-           
-           resizeImage: function (file, callback) {
-             console.log('resizing Image:');
-             console.log(file);
-             
-             const MAX_WIDTH = 1500;
-             const MAX_HEIGHT = 1000;
-             
-             var reader = new FileReader();
-             reader.onloadend = function() {
-               var tempImg = new Image();
-               tempImg.src = reader.result;
-               tempImg.onload = function() {                 
-                 var tempW = tempImg.width;
-                 var tempH = tempImg.height;
-                 
-                 if (tempW > tempH) {
-                   if (tempW > MAX_WIDTH) {
-                     tempH *= MAX_WIDTH / tempW;
-                     tempW = MAX_WIDTH;
-                   }
-                 } else {
-                   if (tempH > MAX_HEIGHT) {
-                     tempW *= MAX_HEIGHT / tempH;
-                     tempH = MAX_HEIGHT;
-                   }
-                 }
-                 
-                 var canvas = document.createElement('canvas');
-                 canvas.width = tempW;
-                 canvas.height = tempH;
-
-                 var ctx = canvas.getContext("2d");
-                 ctx.drawImage(this, 0, 0, tempW, tempH);
-                 
-                 function drawRotated(ctx, degrees){
-                   ctx.clearRect(0,0,canvas.width,canvas.height);
-                   ctx.save();
-                   ctx.translate(canvas.width/2,canvas.height/2);
-                   ctx.rotate(degrees*Math.PI/180);
-                   ctx.drawImage(image,-image.width/2,-image.width/2);
-                   ctx.restore();
-                 }
-
-                 var dataURL = canvas.toDataURL("image/png");
-                 callback(dataURL);
-               }    
-             }
-             reader.readAsDataURL(file);
-           }
-         }
-       });
-       
-       $('#droptarget, #upload__title').click(function() {
-         $('#pictures').click();
-       });
-       
-       $(function() {
-         $('textarea[maxlength]').each(function() {
-           var $textarea = $(this);
-           var maxlength = $textarea.attr('maxlength');
-           var val = $textarea.val();
-           $textarea.val(val.slice(0, maxlength));
-           $textarea.bind('keyup', function() {
-             $textarea.val($textarea.val().slice(0, maxlength));
-           });
-         });
-       });
-     }());     
-    </script>
+             });
+           }());     
+          </script>
   </body>
 </html>

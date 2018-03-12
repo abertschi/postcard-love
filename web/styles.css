@@ -709,6 +709,19 @@ input {
     font-style: normal;
 }
 
+.howworks__text {
+    font-variant: normal;
+    margin-top: 40px;
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+    /* font-weight: bold; */
+}
+
+.howworks__text a {
+    color: white;
+}
+
 @media only screen and (min-width: 480px) {
 }
 
