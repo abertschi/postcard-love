@@ -14,7 +14,7 @@ MarkupSafe==1.0
 olefile==0.44
 Pillow==4.3.0
 pony==0.7.3
-postcard-creator==0.0.7
+postcard-creator==0.0.8
 python-resize-image==1.1.11
 requests==2.18.4
 requests-toolbelt==0.8.0
