@@ -68,25 +68,45 @@ def create_api_sender(db_postcard):
 def send_cards(api_wrappers, db_cards):
     card_i = 0
     sent_cards = []
+    try_only_one_wrapper = False
 
     for api_wrapper in api_wrappers:
-        if card_i >= len(db_cards):
+        if try_only_one_wrapper:
+            # on exception we may rather leave and not try more wrappers
             break
 
-        pending_card = db_cards[card_i]
-        card_i = card_i + 1
+        while card_i < len(db_cards):
+            pending_card = db_cards[card_i]
+            card_i = card_i + 1
 
-        if not image_utility.can_printout_card(pending_card):
-            # Todo, reuse wrapper if card was cancelled
-            logger.info('card {} was flagged as cancelled.'.format(pending_card.id))
-            mark_postcard_as_cancelled(pending_card.id)
-            continue
+            if not image_utility.can_printout_card(pending_card):
+                # Todo, reuse wrapper if card was cancelled
+                logger.info('card {} was flagged as cancelled.'.format(pending_card.id))
+                mark_postcard_as_cancelled(pending_card.id)
+                continue
 
-        response = send_card_with_wrapper(api_wrapper, pending_card)
-        if response:
-            logger.debug('postcard id:{} is sent'.format(pending_card.id))
-            mark_postcard_as_sent(postcard_id=pending_card.id)
-            sent_cards.append(pending_card.id)
+            try:
+                response = send_card_with_wrapper(api_wrapper, pending_card)
+                if response:
+                    logger.debug('postcard id:{} is sent'.format(pending_card.id))
+                    mark_postcard_as_sent(postcard_id=pending_card.id)
+                    sent_cards.append(pending_card.id)
+                    # on success we break out of the loop to use the next
+                    # api wrapper and potentially send more cards
+                    break
+                else:
+                    logger.info('postcard id:{} is not sent. try next one'.format(pending_card.id))
+                    # on mock send or no send but no exception try next card if more cards left
+                    continue
+
+            except Exception as e:
+                logger.warning('error in sending card {}'.format(pending_card.id))
+                logger.warning(e)
+                logger.warning('trying next card')
+                try_only_one_wrapper = True
+                # on exception there may be an issue with the card itself, so try
+                # next card as long as there are pending cards
+                continue
 
     return sent_cards
 
