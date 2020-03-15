@@ -109,7 +109,7 @@ def store_postcard(postcard_request, recipient):
 
 
 @db_session
-def get_pending_postcards(limit=10):
+def get_pending_postcards(limit=100):
     cards = select(c for c in DbPostcard if c.is_sent is False and c.is_cancelled is False) \
                 .sort_by(desc(DbPostcard.priority))[:limit]
 
