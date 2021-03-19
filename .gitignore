@@ -19,3 +19,4 @@ __pycache__
 backend/scripts/prod-*
 log.log
 .idea
+**/local_secrets/
