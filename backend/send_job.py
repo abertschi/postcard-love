@@ -36,7 +36,7 @@ def process():
         exit(1)
 
     random.shuffle(api_wrappers)
-    pending_cards = get_pending_postcards(limit=len(api_wrappers))
+    pending_cards = get_pending_postcards()
 
     sent_cards = send_cards(api_wrappers, pending_cards)
     logger.info('{}/{} postcards ({}) are sent'.format(len(sent_cards), get_size_of_pending_postcards(), sent_cards))
