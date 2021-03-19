@@ -1,7 +1,6 @@
 # postcard-love
 > Say hi and send me a physical postcard for free
 
-Browse https://postcard.abertschi.ch  
 
 <a href="https://postcard.abertschi.ch"><img src='./.assets/img1.png' widht=200/></a>
 
