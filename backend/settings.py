@@ -34,7 +34,7 @@ NSFW_CLIENT_ID = ''
 NSFW_CLIENT_PW = ''
 
 try:
-    from secrets.settings_local import *
+    from local_secrets.settings_local import *
 except ImportError:
     logging.getLogger('settings').warn('no local settings found')
     pass
