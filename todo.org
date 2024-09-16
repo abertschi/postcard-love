@@ -1,4 +1,0 @@
-* Todos
-** TODO Favicon
-** TODO NSFW detetion
-** TODO Nginx

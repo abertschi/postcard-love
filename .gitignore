@@ -1,3 +1,4 @@
+*~
 .DS_Store
 node_modules/
 dist/
@@ -20,3 +21,5 @@ backend/scripts/prod-*
 log.log
 .idea
 **/local_secrets/
+
+notes.org*~

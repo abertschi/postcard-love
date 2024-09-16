@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
-var sass = require('gulp-sass');
+// var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 var cleanCSS = require('gulp-clean-css');
@@ -14,6 +14,10 @@ var del = require('del');
 var sequence = require('run-sequence');
 var minifyInline = require('gulp-minify-inline');
 var gulpCopy = require('gulp-copy');
+var jpegoptim = require('imagemin-jpegoptim'); 
+
+
+const pngquant = require('gulp-pngquant');
 
 let target = './backend/static/';
 var config = {
@@ -42,16 +46,17 @@ gulp.task('reload', function() {
   browserSync.reload();
 });
 
-gulp.task('serve', ['sass'], function() {
+gulp.task('serve', [], function() {
   browserSync({
     server: config.src
   });
   
   gulp.watch([config.htmlin, config.jsin], ['reload']);
-  gulp.watch(config.scssin, ['sass']);
+//   gulp.watch(config.scssin, ['sass']);
 
 });
 
+/*
 gulp.task('sass', function() {
   return gulp.src(config.scssin)
              .pipe(sourcemaps.init())
@@ -63,6 +68,8 @@ gulp.task('sass', function() {
              .pipe(gulp.dest(config.scssout))
              .pipe(browserSync.stream());
 });
+*/
+
 
 gulp.task('css', function() {
   return gulp.src(config.cssin)
@@ -83,11 +90,14 @@ gulp.task('copy-js-libs', function(){
               .pipe(gulp.dest(config.jsoutlibs));
 });
 
+
 gulp.task('img', function() {
   return gulp.src(config.imgin)
-             .pipe(changed(config.imgout))
-             .pipe(imagemin())
-             .pipe(gulp.dest(config.imgout));
+      .pipe(imagemin([
+	    jpegoptim({ max: 70, progressive: true }), 
+	  pngquant({ quality: [0.6, 0.80] }),
+         ]))
+      .pipe(gulp.dest(config.imgout))
 });
 
 gulp.task('html', function() {
