@@ -18,7 +18,7 @@ POST_ACCOUNTS = [
 #of type postcard_creator.Recipient
 RECIPIENT_DEFAULT = None
 
-BASEDIR_PICTURES = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
+BASEDIR_PICTURES = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'share/images')
 
 # structure
 # {
